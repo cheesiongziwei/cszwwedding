@@ -1,4 +1,4 @@
-<!-- Version: v2.3.0-DeepPetal | Date: 2025-01-15 | 花瓣颜色加深增强 -->
+<!-- Version: v2.3.1-FixObserver | Date: 2025-01-15 | 修复 section-2 图片滚动不显示问题 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -41,11 +41,11 @@
             overflow: hidden;
         }
 
-        /* 🌸 飘落花瓣样式 - 颜色加深增强 */
+        /* 🌸 飘落花瓣样式 */
         #entrance .petal {
             position: absolute;
             top: -20px;
-            background: radial-gradient(circle at 30% 30%, #ffe8f5, #f570a8); /* 加深颜色：亮粉到深粉 */
+            background: radial-gradient(circle at 30% 30%, #ffe8f5, #f570a8);
             border-radius: 50% 0 50% 0;
             opacity: 0;
             pointer-events: none;
@@ -53,25 +53,15 @@
             animation: petalFall linear infinite;
             animation-duration: var(--duration, 8s);
             animation-delay: var(--delay, 0s);
-            box-shadow: 0 3px 10px rgba(245, 112, 168, 0.5); /* 加深阴影 */
-            border: 0.5px solid rgba(245, 112, 168, 0.3); /* 添加边框增强可见度 */
+            box-shadow: 0 3px 10px rgba(245, 112, 168, 0.5);
+            border: 0.5px solid rgba(245, 112, 168, 0.3);
         }
 
         @keyframes petalFall {
-            0% { 
-                transform: translateY(-5vh) rotate(0deg) translateX(0); 
-                opacity: 0; 
-            }
-            10% { 
-                opacity: var(--max-opacity, 0.8); /* 提高默认最大不透明度 */
-            }
-            90% { 
-                opacity: var(--max-opacity, 0.8); 
-            }
-            100% { 
-                transform: translateY(105vh) rotate(var(--rotate, 360deg)) translateX(var(--sway, 30px)); 
-                opacity: 0; 
-            }
+            0% { transform: translateY(-5vh) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: var(--max-opacity, 0.8); }
+            90% { opacity: var(--max-opacity, 0.8); }
+            100% { transform: translateY(105vh) rotate(var(--rotate, 360deg)) translateX(var(--sway, 30px)); opacity: 0; }
         }
 
         /* 中国风边框容器 */
@@ -345,7 +335,10 @@
         .gallery-section { padding: 6vh 0; }
         .photo-block {
             display: flex; flex-direction: column; gap: 32px;
-            margin-bottom: 12vh; opacity: 0; transform: translateY(30px); transition: all 1s var(--ease);
+            margin-bottom: 12vh; 
+            opacity: 0; 
+            transform: translateY(30px); 
+            transition: all 1s var(--ease);
         }
         .photo-block.visible { opacity: 1; transform: translateY(0); }
         .img-wrapper { width: 100%; height: 55vh; overflow: hidden; position: relative; background: #e8e4dc; }
@@ -481,12 +474,8 @@
                 padding: 50px 20px 40px; 
                 min-height: 700px;
             }
-            .cat-item img { 
-                height: 85px; 
-            }
-            .couple-illustration img { 
-                width: 250px; 
-            }
+            .cat-item img { height: 85px; }
+            .couple-illustration img { width: 250px; }
             .cat-name { font-size: 0.42rem; }
             .enter-btn { width: 48px; height: 48px; font-size: 1.1rem; }
             .enter-btn-wrapper::before, .enter-btn-wrapper::after { width: 48px; height: 48px; }
@@ -773,22 +762,20 @@
     </div>
 
     <script>
-        // 🌸 生成飘落花瓣特效 - 颜色加深增强
+        // 🌸 生成飘落花瓣特效
         function createPetals() {
             const entrance = document.getElementById('entrance');
-            const petalCount = 45; // 花瓣数量
+            const petalCount = 45; 
             for (let i = 0; i < petalCount; i++) {
                 const petal = document.createElement('div');
                 petal.classList.add('petal');
-                
-                // 随机属性
-                const size = Math.random() * 12 + 6; // 6-18px
-                const left = Math.random() * 100; // 水平位置 0-100%
-                const duration = Math.random() * 6 + 7; // 下落时间 7-13s
-                const delay = Math.random() * 10; // 延迟 0-10s
-                const rotate = (Math.random() * 720 - 360); // 旋转角度
-                const sway = (Math.random() * 80 - 40); // 左右飘动幅度
-                const opacity = Math.random() * 0.25 + 0.7; // 透明度 0.7-0.95（加深增强）
+                const size = Math.random() * 12 + 6; 
+                const left = Math.random() * 100; 
+                const duration = Math.random() * 6 + 7; 
+                const delay = Math.random() * 10; 
+                const rotate = (Math.random() * 720 - 360); 
+                const sway = (Math.random() * 80 - 40); 
+                const opacity = Math.random() * 0.25 + 0.7; 
 
                 petal.style.width = `${size}px`;
                 petal.style.height = `${size}px`;
@@ -808,22 +795,18 @@
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('wedding_lang', lang);
-            
             document.getElementById('entrance').className = `lang-${lang}`;
             document.getElementById('main').className = `lang-${lang}`;
-            
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if(btn.textContent.includes(lang === 'zh' ? '中文' : 'English')) {
                     btn.classList.add('active');
                 }
             });
-
             document.getElementById('enter-area').classList.add('visible');
         }
         setLanguage(currentLang);
         
-        // 初始化花瓣
         createPetals();
 
         const catSounds = {
@@ -886,13 +869,21 @@
             document.getElementById('progress').style.width = p + '%';
         }, {passive: true});
 
+        // 【修复】：正确遍历 NodeList 来观察元素
         function initScroll() {
-            new IntersectionObserver((entries) => {
+            const photoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-            }, { threshold: 0.15 }).observe(document.querySelectorAll('.photo-block'));
-            new IntersectionObserver((entries) => {
+            }, { threshold: 0.15 });
+            
+            // 修复：使用 forEach 循环每一个元素
+            document.querySelectorAll('.photo-block').forEach(el => photoObserver.observe(el));
+
+            const tlObserver = new IntersectionObserver((entries) => {
                 entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-            }, { threshold: 0.3 }).observe(document.querySelectorAll('.tl-item'));
+            }, { threshold: 0.3 });
+            
+            // 修复：使用 forEach 循环每一个元素
+            document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
         }
 
         function initCat() {
