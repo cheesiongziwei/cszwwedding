@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Dinner Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f9f7f4;
+      --text-main: #2c2c2c;
+      --text-sub: #7a7570;
+      --accent: #b89b6d;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Inter', sans-serif;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== SPLASH SCREEN ===== */
+    .splash {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 1000;
+      transition: opacity 1s var(--ease), visibility 1s;
+    }
+    .splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    
+    .paw-btn {
+      width: 60px; height: 60px;
+      cursor: pointer;
+      transition: transform 0.4s var(--ease);
+      position: relative;
+    }
+    .paw-btn:hover { transform: scale(1.1) rotate(-5deg); }
+    .paw-btn:active { transform: scale(0.95); }
+    .paw-btn svg { width: 100%; height: 100%; fill: var(--accent); }
+    .splash-text {
+      margin-top: 24px;
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      color: var(--text-sub);
+      letter-spacing: 0.1em;
+      opacity: 0.8;
+    }
+
+    /* ===== LAYOUT & TYPOGRAPHY ===== */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 1.2s var(--ease) 0.5s, transform 1.2s var(--ease) 0.5s;
+    }
+    main.visible { opacity: 1; transform: translateY(0); }
+
+    h1, h2, .quote, .title-en, .title-cn { font-family: var(--font-serif); }
+    h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; line-height: 1.2; margin-bottom: 16px; }
+    h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 300; margin-bottom: 12px; }
+    p { font-size: 1rem; color: var(--text-sub); max-width: 600px; }
+    
+    section { margin-bottom: 100px; text-align: center; }
+    .divider {
+      width: 40px; height: 1px; background: var(--accent);
+      margin: 24px auto 0; opacity: 0.6;
+    }
+
+    /* ===== NAV / LANGUAGE TOGGLE ===== */
+    nav {
+      position: fixed; top: 24px; right: 24px; z-index: 90;
+      opacity: 0; transition: opacity 0.8s var(--ease) 1.5s;
+    }
+    nav.visible { opacity: 1; }
+    .lang-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font-sans); font-size: 0.85rem;
+      color: var(--text-sub); letter-spacing: 0.05em;
+      padding: 6px 12px; transition: color 0.3s;
+    }
+    .lang-btn:hover { color: var(--accent); }
+
+    /* ===== GALLERY ===== */
+    .gallery { display: flex; flex-direction: column; gap: 80px; }
+    .photo-pair {
+      display: grid; grid-template-columns: 1fr;
+      gap: 24px; align-items: center;
+    }
+    @media(min-width: 768px) { .photo-pair { grid-template-columns: 1.2fr 1fr; } }
+    
+    .img-placeholder {
+      width: 100%; aspect-ratio: 3/4;
+      background: #e8e4df;
+      border-radius: 4px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+    }
+    .img-placeholder img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.9; transition: transform 0.8s var(--ease);
+    }
+    .img-placeholder:hover img { transform: scale(1.03); }
+    
+    .quote {
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      font-style: italic; color: var(--text-main);
+      line-height: 1.4; opacity: 0.9;
+      padding: 0 20px;
+    }
+    .quote small { display: block; font-size: 0.8rem; color: var(--text-sub); margin-top: 8px; letter-spacing: 0.1em; font-style: normal; }
+
+    /* ===== DETAILS ===== */
+    .details { display: grid; gap: 32px; }
+    .detail-item h3 {
+      font-family: var(--font-serif); font-size: 1.3rem; font-weight: 400;
+      margin-bottom: 8px; color: var(--text-main);
+    }
+    .detail-item p { margin: 0 auto; font-size: 1rem; }
+
+    /* ===== RSVP ===== */
+    .rsvp-wrapper { margin-top: 60px; }
+    .rsvp-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--accent);
+      font-family: var(--font-sans);
+      font-size: 0.95rem; letter-spacing: 0.12em; text-transform: uppercase;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.3s var(--ease);
+    }
+    .rsvp-btn::after {
+      content: ''; position: absolute; bottom: 0; left: 50%;
+      width: 0; height: 1px; background: var(--accent);
+      transition: all 0.4s var(--ease); transform: translateX(-50%);
+    }
+    .rsvp-btn:hover::after { width: 100%; }
+    .rsvp-btn:hover { color: var(--text-main); }
+
+    /* ===== FOOTER ===== */
+    footer { text-align: center; padding-bottom: 80px; color: var(--text-sub); font-size: 0.9rem; }
+    .paw-trail { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; opacity: 0.4; }
+    .paw-trail svg { width: 12px; fill: var(--accent); }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- SPLASH SCREEN -->
+  <div class="splash" id="splash">
+    <div class="paw-btn" id="openBtn">
+      <svg viewBox="0 0 512 512"><path d="M256 32c-24.7 0-45.4 18.2-48.3 42.2C183.6 92.5 160 120.7 160 152c0 28.7 15.7 54.1 38.7 67.6C178.8 237.2 144 280.3 144 336c0 61.9 50.1 112 112 112s112-50.1 112-112c0-55.7-34.8-98.8-54.7-116.4C434.3 206.1 450 180.7 450 152c0-31.3-23.6-59.5-47.7-77.8C399.4 50.2 378.7 32 256 32zm-64 192a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm-64 96a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>
+    </div>
+    <p class="splash-text" data-en="Click to Open" data-cn="轻触开启">Click to Open</p>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <button class="lang-btn" id="langToggle">EN / 中文</button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="mainContent">
+    <!-- INTRO -->
+    <section id="intro">
+      <h1 class="fade-in" data-en="Together with our families" data-cn="与家人共鉴">Together with our families</h1>
+      <p class="fade-in" data-en="We invite you to celebrate our wedding dinner, surrounded by love, light, and the gentle purr of new beginnings." 
+         data-cn="诚邀您出席我们的婚礼晚宴。愿爱与温柔，伴我们迈入人生新篇。">
+        We invite you to celebrate our wedding dinner, surrounded by love, light, and the gentle purr of new beginnings.
+      </p>
+      <div class="divider fade-in"></div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+      <div class="photo-pair fade-in">
+        <div class="img-placeholder">
+          <!-- 替换为实际婚纱照: <img src="your-photo-1.jpg" alt="Wedding Photo 1"> -->
+          <img src="https://images.unsplash.com/photo-1511285560982-1351cdeb9821?auto=format&fit=crop&w=800&q=80" alt="Placeholder">
+        </div>
+        <div>
+          <p class="quote" data-en="In your light, I learn how to love." data-cn="在你的光芒中，我学会了如何去爱。">
+            In your light, I learn how to love.
+          </p>
+        </div>
+      </div>
+
+      <div class="photo-pair fade-in">
+        <div>
+          <p class="quote" data-en="I have found the one whom my soul loves." data-cn="我遇见了灵魂相契之人。">
+            I have found the one whom my soul loves.
+          </p>
+        </div>
+        <div class="img-placeholder">
+          <!-- 替换为实际婚纱照: <img src="your-photo-2.jpg" alt="Wedding Photo 2"> -->
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Placeholder">
+        </div>
+      </div>
+
+      <div class="photo-pair fade-in">
+        <div class="img-placeholder">
+          <!-- 替换为实际婚纱照: <img src="your-photo-3.jpg" alt="Wedding Photo 3"> -->
+          <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80" alt="Placeholder">
+        </div>
+        <div>
+          <p class="quote" data-en="Love is not just looking at each other, it's looking in the same direction." data-cn="爱不是彼此凝视，而是一同望向同一个方向。">
+            Love is not just looking at each other, it's looking in the same direction.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAILS -->
+    <section id="details">
+      <h2 class="fade-in" data-en="The Evening" data-cn="晚宴详情">The Evening</h2>
+      <div class="details fade-in">
+        <div class="detail-item">
+          <h3 data-en="Date & Time" data-cn="日期与时间">Date & Time</h3>
+          <p data-en="Saturday, October 18, 2026 • 6:30 PM" data-cn="2026年10月18日 星期六 • 下午6:30">Saturday, October 18, 2026 • 6:30 PM</p>
+        </div>
+        <div class="detail-item">
+          <h3 data-en="Venue" data-cn="地点">Venue</h3>
+          <p data-en="The Grand Terrace, [Your City/Hotel Name]" data-cn="[城市/酒店名称] 露台厅">The Grand Terrace, [Your City/Hotel Name]</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+    <section id="rsvp" class="rsvp-wrapper fade-in">
+      <h2 data-en="Kindly Respond" data-cn="敬请赐复">Kindly Respond</h2>
+      <p style="margin-bottom: 24px;" data-en="Please let us know if you can join us by September 15, 2026." 
+         data-cn="请于 2026年9月15日 前告知我们您的出席意向。">
+        Please let us know if you can join us by September 15, 2026.
+      </p>
+      <!-- 🔗 替换为您的 Google Form 链接 -->
+      <a href="https://forms.google.com/your-form-link" target="_blank" class="rsvp-btn" data-en="RSVP" data-cn="确认出席">RSVP</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="fade-in">
+      <div class="paw-trail">
+        <svg viewBox="0 0 512 512"><path d="M256 32c-24.7 0-45.4 18.2-48.3 42.2C183.6 92.5 160 120.7 160 152c0 28.7 15.7 54.1 38.7 67.6C178.8 237.2 144 280.3 144 336c0 61.9 50.1 112 112 112s112-50.1 112-112c0-55.7-34.8-98.8-54.7-116.4C434.3 206.1 450 180.7 450 152c0-31.3-23.6-59.5-47.7-77.8C399.4 50.2 378.7 32 256 32zm-64 192a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm-64 96a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>
+        <svg viewBox="0 0 512 512"><path d="M256 32c-24.7 0-45.4 18.2-48.3 42.2C183.6 92.5 160 120.7 160 152c0 28.7 15.7 54.1 38.7 67.6C178.8 237.2 144 280.3 144 336c0 61.9 50.1 112 112 112s112-50.1 112-112c0-55.7-34.8-98.8-54.7-116.4C434.3 206.1 450 180.7 450 152c0-31.3-23.6-59.5-47.7-77.8C399.4 50.2 378.7 32 256 32zm-64 192a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm-64 96a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>
+        <svg viewBox="0 0 512 512"><path d="M256 32c-24.7 0-45.4 18.2-48.3 42.2C183.6 92.5 160 120.7 160 152c0 28.7 15.7 54.1 38.7 67.6C178.8 237.2 144 280.3 144 336c0 61.9 50.1 112 112 112s112-50.1 112-112c0-55.7-34.8-98.8-54.7-116.4C434.3 206.1 450 180.7 450 152c0-31.3-23.6-59.5-47.7-77.8C399.4 50.2 378.7 32 256 32zm-64 192a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm-64 96a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>
+      </div>
+      <p data-en="With love, [Groom] & [Bride]" data-cn="挚爱，[新郎] & [新娘]">With love, [Groom] & [Bride]</p>
+    </footer>
+  </main>
+
+  <script>
+    // 1. Splash Screen Click Open
+    const splash = document.getElementById('splash');
+    const mainContent = document.getElementById('mainContent');
+    const nav = document.getElementById('nav');
+    const openBtn = document.getElementById('openBtn');
+
+    openBtn.addEventListener('click', () => {
+      splash.classList.add('hidden');
+      mainContent.classList.add('visible');
+      nav.classList.add('visible');
+      document.body.style.overflow = 'auto';
+    });
+
+    // 2. Language Toggle
+    const langToggle = document.getElementById('langToggle');
+    let currentLang = 'en';
+
+    function updateLanguage() {
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${currentLang}`);
+      });
+      document.documentElement.lang = currentLang === 'en' ? 'en' : 'zh';
+    }
+
+    langToggle.addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'cn' : 'en';
+      langToggle.textContent = currentLang === 'en' ? 'EN / 中文' : 'EN / 中文';
+      updateLanguage();
+    });
+
+    // 3. Scroll Fade-in Animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Prevent scroll on splash
+    document.body.style.overflow = 'hidden';
+  </script>
+</body>
+</html>

@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ming & Luna - Wedding Invitation</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Great+Vibes&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blush: '#F4D4D8',
+                        cream: '#FFF8F3',
+                        lavender: '#E8D5F5',
+                        softgold: '#D4AF37',
+                        palepink: '#FDE8E8',
+                        warmwhite: '#FEFAF6',
+                        muted: '#A89B9D',
+                        deeprose: '#8B5A5A',
+                        sage: '#C5D5CB',
+                        mauve: '#D4A5A5'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', '"Noto Serif SC"', 'serif'],
+                        elegant: ['"Great Vibes"', '"Ma Shan Zheng"', 'cursive'],
+                        body: ['"Cormorant Garamond"', '"Noto Serif SC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
+            background: linear-gradient(180deg, #FFF8F3 0%, #FDE8E8 50%, #E8D5F5 100%);
+            color: #4A3B3E;
+            overflow-x: hidden;
+        }
+
+        /* Fluid Typography */
+        h1 { font-size: clamp(2.5rem, 8vw, 6rem); }
+        h2 { font-size: clamp(2rem, 5vw, 4rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+        p { font-size: clamp(1rem, 2vw, 1.3rem); }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-3deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes pawTap {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.15) rotate(-5deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            75% { transform: scale(1.05) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-slow { animation: floatSlow 8s ease-in-out infinite; }
+        .animate-pulse-soft { animation: pulse 3s ease-in-out infinite; }
+
+        /* Particle Container */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .particle {
+            position: absolute;
+            opacity: 0.6;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        /* Navigation */
+        .nav-container {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 248, 243, 0.85);
+            box-shadow: 0 4px 30px rgba(139, 90, 90, 0.08);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Page Number */
+        .page-number {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #D4AF37 0%, #F4D4D8 50%, #E8D5F5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Landing Paw */
+        .paw-button {
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.4));
+        }
+
+        .paw-button:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 50px rgba(212, 175, 55, 0.6));
+        }
+
+        .paw-button:active {
+            animation: pawTap 0.6s ease;
+        }
+
+        /* Shimmer Text */
+        .shimmer-text {
+            background: linear-gradient(90deg, #D4AF37, #FFF8F3, #E8D5F5, #D4AF37);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Timeline Line */
+        .timeline-line {
+            background: linear-gradient(180deg, transparent, #D4AF37 20%, #D4AF37 80%, transparent);
+        }
+
+        /* Gallery Hover */
+        .gallery-item {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02) rotate(0.5deg);
+        }
+
+        .gallery-item img {
+            transition: all 0.6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .lightbox.active {
+            display: flex;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Form Styles */
+        .form-input {
+            background: rgba(255, 248, 243, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            background: rgba(255, 248, 243, 0.9);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #D4AF37 0%, #E8D5F5 100%);
+            transition: all 0.5s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Music Control */
+        .music-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 50;
+            background: rgba(255, 248, 243, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .music-btn.playing {
+            animation: pulse 2s infinite;
+        }
+
+        /* Section Transitions */
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        /* Language Toggle */
+        .lang-btn {
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #D4AF37, #E8D5F5);
+            color: #4A3B3E;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #FFF8F3;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #D4AF37, #E8D5F5);
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-desktop { display: none; }
+            .nav-mobile { display: flex; }
+        }
+
+        @media (min-width: 769px) {
+            .nav-mobile { display: none; }
+        }
+
+        /* Smooth Scroll Snap (optional feel) */
+        .scroll-section {
+            scroll-snap-align: start;
+        }
+
+        /* Elegant Hover Effects */
+        .hover-lift {
+            transition: all 0.5s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Gradient Overlays */
+        .gradient-overlay {
+            background: linear-gradient(180deg, rgba(255,248,243,0) 0%, rgba(255,248,243,0.8) 100%);
+        }
+
+        /* RSVP Success Animation */
+        .success-checkmark {
+            animation: checkmark 0.5s ease-in-out;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Paw Print Trail */
+        .paw-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 4;
+            animation: fadeOut 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+    </style>
+</head>
+
+<body class="bg-warmwhite">
+
+    <!-- Particles Container -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Music Control -->
+    <div class="music-btn w-12 h-12 rounded-full flex items-center justify-center cursor-pointer" id="musicToggle" onclick="toggleMusic()">
+        <svg id="musicIcon" class="w-6 h-6 text-deeprose" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Navigation -->
+    <nav class="nav-container fixed top-0 left-0 w-full z-40 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl font-elegant shimmer-text">M & L</span>
+                <span class="text-xs text-muted font-body tracking-widest uppercase hidden sm:inline" data-en="Wedding" data-zh="婚礼"></span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <div class="nav-desktop hidden md:flex items-center space-x-8">
+                <a href="#section01" class="nav-link text-sm font-body tracking-wider text-deeprose hover:text-softgold" data-en="Home" data-zh="首页">Home</a>
+                <a href="#section02" class="nav-link text-sm font-body tracking-wider text-deeprose hover:text-softgold" data-en="Love" data-zh="爱情">Love</a>
+                <a href="#section03" class="nav-link text-sm font-body tracking-wider text-deeprose hover:text-softgold" data-en="Story" data-zh="故事">Story</a>
+                <a href="#section04" class="nav-link text-sm font-body tracking-wider text-deeprose hover:text-softgold" data-en="Gallery" data-zh="相册">Gallery</a>
+                <a href="#section05" class="nav-link text-sm font-body tracking-wider text-deeprose hover:text-softgold" data-en="Schedule" data-zh="日程">Schedule</a>
+                <a href="#section06" class="nav-link text-sm font-body tracking-wider text-deeprose hover:text-softgold" data-en="Venue" data-zh="场地">Venue</a>
+                <a href="#section07" class="nav-link text-sm font-body tracking-wider text-deeprose hover:text-softgold" data-en="RSVP" data-zh="回复">RSVP</a>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="flex items-center space-x-3">
+                <button class="lang-btn active px-4 py-2 rounded-full text-sm font-body" id="langEn" onclick="switchLang('en')">EN</button>
+                <button class="lang-btn px-4 py-2 rounded-full text-sm font-body" id="langZh" onclick="switchLang('zh')">中文</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <div class="nav-mobile fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40 md:hidden">
+        <div class="bg-warmwhite/90 backdrop-blur-lg rounded-full px-6 py-3 flex items-center space-x-6 shadow-lg border border-softgold/20">
+            <a href="#section01" class="text-deeprose text-xs font-body">Home</a>
+            <a href="#section03" class="text-deeprose text-xs font-body">Story</a>
+            <a href="#section05" class="text-deeprose text-xs font-body">Schedule</a>
+            <a href="#section07" class="text-deeprose text-xs font-body">RSVP</a>
+        </div>
+    </div>
+
+    <!-- ================= SECTION 01: LANDING ================= -->
+    <section id="section01" class="relative min-h-screen flex items-center justify-center overflow-hidden scroll-section">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-gradient-to-b from-cream via-palepink to-lavender"></div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 left-10 animate-float-slow opacity-30">
+            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                <path d="M60 20 C40 20, 20 40, 20 60 C20 80, 40 100, 60 100 C80 100, 100 80, 100 60 C100 40, 80 20, 60 20Z" fill="url(#grad1)" opacity="0.3"/>
+                <path d="M45 45 Q60 35 75 45 Q85 60 75 75 Q60 85 45 75 Q35 60 45 45Z" fill="#D4AF37" opacity="0.2"/>
+                <defs>
+                    <linearGradient id="grad1" x1="20" y1="20" x2="100" y2="100">
+                        <stop offset="0%" stop-color="#F4D4D8"/>
+                        <stop offset="100%" stop-color="#E8D5F5"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="absolute bottom-32 right-16 animate-float opacity-20">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="#D4AF37">
+                <ellipse cx="50" cy="50" rx="40" ry="35" opacity="0.3"/>
+                <ellipse cx="25" cy="30" rx="12" ry="15" opacity="0.2"/>
+                <ellipse cx="75" cy="30" rx="12" ry="15" opacity="0.2"/>
+                <ellipse cx="35" cy="25" rx="10" ry="12" opacity="0.2"/>
+                <ellipse cx="65" cy="25" rx="10" ry="12" opacity="0.2"/>
+            </svg>
+        </div>
+
+        <!-- Main Content -->
+        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+            <!-- Cat Silhouette -->
+            <div class="mb-8 animate-float-slow">
+                <svg class="w-24 h-24 mx-auto text-softgold opacity-60" viewBox="0 0 100 100" fill="currentColor">
+                    <path d="M50 15 L40 35 Q30 40 25 50 Q20 65 30 75 Q35 85 50 90 Q65 85 70 75 Q80 65 75 50 Q70 40 60 35 L50 15Z M30 30 Q25 20 30 15 M70 30 Q75 20 70 15"/>
+                </svg>
+            </div>
+
+            <h1 class="font-elegant shimmer-text mb-4 text-5xl md:text-7xl lg:text-8xl" data-en="Ming & Luna" data-zh="明 & 露娜">Ming & Luna</h1>
+            
+            <p class="text-lg md:text-xl text-deeprose/70 font-body tracking-widest mb-12" data-en="We're getting married" data-zh="我们要结婚了">We're getting married</p>
+
+            <!-- Interactive Paw Button -->
+            <div class="cursor-pointer paw-button inline-block" id="pawButton" onclick="startExperience()">
+                <svg class="w-32 h-32 md:w-40 md:h-40 mx-auto" viewBox="0 0 200 200" fill="none">
+                    <!-- Main Paw Pad -->
+                    <ellipse cx="100" cy="110" rx="45" ry="50" fill="url(#pawGrad)" opacity="0.9"/>
+                    <!-- Toe Pads -->
+                    <ellipse cx="60" cy="75" rx="18" ry="22" fill="url(#pawGrad)" opacity="0.8"/>
+                    <ellipse cx="90" cy="55" rx="16" ry="20" fill="url(#pawGrad)" opacity="0.8"/>
+                    <ellipse cx="110" cy="55" rx="16" ry="20" fill="url(#pawGrad)" opacity="0.8"/>
+                    <ellipse cx="140" cy="75" rx="18" ry="22" fill="url(#pawGrad)" opacity="0.8"/>
+                    <defs>
+                        <linearGradient id="pawGrad" x1="50" y1="50" x2="150" y2="150">
+                            <stop offset="0%" stop-color="#D4AF37"/>
+                            <stop offset="50%" stop-color="#F4D4D8"/>
+                            <stop offset="100%" stop-color="#E8D5F5"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                
+                <p class="text-sm md:text-base text-deeprose/60 font-body mt-6 tracking-wider animate-pulse-soft" 
+                   data-en="Tap the Paw to Begin Our Story" 
+                   data-zh="轻触猫爪开始我们的故事">
+                    Tap the Paw to Begin Our Story
+                </p>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <svg class="w-6 h-6 text-softgold opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Gradient Overlay -->
+        <div class="absolute bottom-0 left-0 w-full h-32 gradient-overlay"></div>
+    </section>
+
+    <!-- ================= SECTION 02: HERO / LOVE INTRODUCTION ================= -->
+    <section id="section02" class="relative min-h-screen flex items-center justify-center py-32 scroll-section">
+        <div class="absolute inset-0 bg-gradient-to-b from-palepink to-cream"></div>
+        
+        <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+            <span class="page-number text-6xl md:text-8xl font-serif font-light opacity-20 absolute -top-8 left-1/2 transform -translate-x-1/2">02</span>
+            
+            <!-- Cat Decorations -->
+            <div class="absolute -top-16 left-10 animate-float-slow opacity-20 hidden md:block">
+                <svg width="80" height="80" viewBox="0 0 100 100" fill="#D4AF37">
+                    <circle cx="50" cy="50" r="30" opacity="0.4"/>
+                    <path d="M30 35 Q40 25 45 35 Q50 25 55 35 Q60 25 70 35" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
+
+            <div class="section-reveal">
+                <p class="text-sm tracking-[0.3em] text-muted uppercase mb-8 font-body" data-en="Two souls, one heart" data-zh="两颗心，一个灵魂">Two souls, one heart</p>
+                
+                <h1 class="font-elegant text-5xl md:text-7xl lg:text-9xl shimmer-text mb-6 leading-tight" data-en="Ming & Luna" data-zh="明 & 露娜">Ming & Luna</h1>
+                
+                <div class="divider w-32 mx-auto my-8"></div>
+                
+                <p class="text-xl md:text-2xl text-deeprose/70 font-body leading-relaxed max-w-2xl mx-auto mb-8" 
+                   data-en="In the gentle company of cats and the warmth of your love, we invite you to witness our forever begin." 
+                   data-zh="在猫咪的温柔陪伴和您温暖的祝福中，我们诚邀您见证我们永远的开始。">
+                    In the gentle company of cats and the warmth of your love, we invite you to witness our forever begin.
+                </p>
+                
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-12 mt-12">
+                    <div class="text-center">
+                        <p class="text-sm tracking-widest text-muted uppercase mb-2 font-body" data-en="Date" data-zh="日期">Date</p>
+                        <p class="text-2xl md:text-3xl font-serif text-deeprose" data-en="Saturday, October 18, 2025" data-zh="2025年10月18日 星期六">Saturday, October 18, 2025</p>
+                    </div>
+                    <div class="w-px h-12 bg-gradient-to-b from-transparent via-softgold to-transparent hidden md:block"></div>
+                    <div class="text-center">
+                        <p class="text-sm tracking-widest text-muted uppercase mb-2 font-body" data-en="Time" data-zh="时间">Time</p>
+                        <p class="text-2xl md:text-3xl font-serif text-deeprose" data-en="3:00 PM" data-zh="下午3:00">3:00 PM</p>
+                    </div>
+                </div>
+
+                <!-- Floating Hearts -->
+                <div class="mt-16 flex justify-center space-x-8 opacity-40">
+                    <svg class="w-8 h-8 text-mauve animate-float" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <svg class="w-10 h-10 text-softgold animate-float-slow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <svg class="w-8 h-8 text-mauve animate-float" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 03: OUR LOVE STORY ================= -->
+    <section id="section03" class="relative py-32 scroll-section">
+        <div class="absolute inset-0 bg-gradient-to-b from-cream via-lavender/30 to-cream"></div>
+        
+        <div class="relative z-10 px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <span class="page-number text-6xl md:text-8xl font-serif font-light opacity-20 absolute -top-8 left-1/2 transform -translate-x-1/2">03</span>
+                <h2 class="font-elegant text-4xl md:text-6xl shimmer-text mb-4" data-en="Our Love Story" data-zh="我们的爱情故事">Our Love Story</h2>
+                <p class="text-deeprose/60 font-body italic" data-en="Where every chapter was written with love" data-zh="每一章都由爱书写">Where every chapter was written with love</p>
+            </div>
+
+            <!-- Timeline -->
+            <div class="relative">
+                <div class="timeline-line absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full hidden md:block"></div>
+                
+                <!-- Timeline Items -->
+                <div class="space-y-24 md:space-y-32">
+                    <!-- Item 1 -->
+                    <div class="relative flex flex-col md:flex-row items-center section-reveal">
+                        <div class="md:w-1/2 md:pr-16 md:text-right mb-8 md:mb-0">
+                            <span class="text-softgold font-serif text-lg">Spring 2020</span>
+                            <h3 class="font-elegant text-2xl md:text-3xl text-deeprose mb-3 mt-2" data-en="First Meeting" data-zh="初次相遇">First Meeting</h3>
+                            <p class="text-deeprose/70 font-body leading-relaxed" 
+                               data-en="Like a stray cat finding its home, our paths crossed at a small café. Luna's gentle smile and Ming's warm eyes created a moment that would forever change our lives. The world felt softer, sweeter." 
+                               data-zh="就像流浪的猫咪找到了家，我们的缘分在一家小咖啡馆开始。露娜温柔的微笑和明亮温暖的目光，创造了永远改变我们生活的一刻。世界变得更加柔软、甜蜜。">
+                                Like a stray cat finding its home, our paths crossed at a small café. Luna's gentle smile and Ming's warm eyes created a moment that would forever change our lives.
+                            </p>
+                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-warmwhite border-2 border-softgold flex items-center justify-center z-10 shadow-lg hidden md:flex">
+                            <svg class="w-6 h-6 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="md:w-1/2 md:pl-16">
+                            <div class="aspect-[4/3] rounded-lg overflow-hidden opacity-80 hover:opacity-100 transition-opacity duration-500">
+                                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600&h=450&fit=crop" alt="Café" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="relative flex flex-col md:flex-row-reverse items-center section-reveal">
+                        <div class="md:w-1/2 md:pl-16 md:text-left mb-8 md:mb-0">
+                            <span class="text-softgold font-serif text-lg">Winter 2021</span>
+                            <h3 class="font-elegant text-2xl md:text-3xl text-deeprose mb-3 mt-2" data-en="Growing Together" data-zh="共同成长">Growing Together</h3>
+                            <p class="text-deeprose/70 font-body leading-relaxed" 
+                               data-en="We adopted our first cat, Mochi, and together we learned that love is about patience, understanding, and the comfort of silent companionship. Every purr was a reminder of the love we shared." 
+                               data-zh="我们收养了第一只猫咪Mochi，一起学会了爱需要耐心、理解和无声陪伴的舒适。每一次呼噜声都在提醒我们彼此分享的爱。">
+                                We adopted our first cat, Mochi, and together we learned that love is about patience, understanding, and the comfort of silent companionship.
+                            </p>
+                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-warmwhite border-2 border-softgold flex items-center justify-center z-10 shadow-lg hidden md:flex">
+                            <svg class="w-6 h-6 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <div class="md:w-1/2 md:pr-16">
+                            <div class="aspect-[4/3] rounded-lg overflow-hidden opacity-80 hover:opacity-100 transition-opacity duration-500">
+                                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&h=450&fit=crop" alt="Cat" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="relative flex flex-col md:flex-row items-center section-reveal">
+                        <div class="md:w-1/2 md:pr-16 md:text-right mb-8 md:mb-0">
+                            <span class="text-softgold font-serif text-lg">Summer 2023</span>
+                            <h3 class="font-elegant text-2xl md:text-3xl text-deeprose mb-3 mt-2" data-en="The Proposal" data-zh="求婚">The Proposal</h3>
+                            <p class="text-deeprose/70 font-body leading-relaxed" 
+                               data-en="Under a canopy of cherry blossoms, with Mochi wearing a tiny ring bearer bow, Ming knelt down and asked the most beautiful question. Luna's tears of joy were all the answer he needed." 
+                               data-zh="在樱花树下，Mochi戴着小小的戒指蝴蝶结，明跪下问出了最美的问题。露娜喜悦的泪水就是所有需要的回答。">
+                                Under a canopy of cherry blossoms, with Mochi wearing a tiny ring bearer bow, Ming knelt down and asked the most beautiful question.
+                            </p>
+                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-warmwhite border-2 border-softgold flex items-center justify-center z-10 shadow-lg hidden md:flex">
+                            <svg class="w-6 h-6 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="md:w-1/2 md:pl-16">
+                            <div class="aspect-[4/3] rounded-lg overflow-hidden opacity-80 hover:opacity-100 transition-opacity duration-500">
+                                <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=450&fit=crop" alt="Cherry Blossoms" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 04: PRE-WEDDING MEMORIES ================= -->
+    <section id="section04" class="relative py-32 scroll-section">
+        <div class="absolute inset-0 bg-gradient-to-b from-cream via-palepink/50 to-cream"></div>
+        
+        <div class="relative z-10 px-6 max-w-7xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <span class="page-number text-6xl md:text-8xl font-serif font-light opacity-20 absolute -top-8 left-1/2 transform -translate-x-1/2">04</span>
+                <h2 class="font-elegant text-4xl md:text-6xl shimmer-text mb-4" data-en="Pre-Wedding Memories" data-zh="婚前回忆">Pre-Wedding Memories</h2>
+                <p class="text-deeprose/60 font-body italic" data-en="Moments we'll treasure forever" data-zh="我们将永远珍藏的瞬间">Moments we'll treasure forever</p>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 section-reveal">
+                <div class="gallery-item rounded-lg overflow-hidden cursor-pointer aspect-[3/4]" onclick="openLightbox(0)">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop" alt="Couple 1" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                        <p class="text-white font-body italic" data-en="Our First Photo" data-zh="我们的第一张照片">Our First Photo</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item rounded-lg overflow-hidden cursor-pointer aspect-[4/3]" onclick="openLightbox(1)">
+                    <img src="https://images.unsplash.com/photo-1529634597503-139d3726fed5?w=800&h=600&fit=crop" alt="Couple 2" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                        <p class="text-white font-body italic" data-en="Spring Walk" data-zh="春日漫步">Spring Walk</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item rounded-lg overflow-hidden cursor-pointer aspect-[3/4]" onclick="openLightbox(2)">
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=800&fit=crop" alt="Couple 3" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                        <p class="text-white font-body italic" data-en="Together Forever" data-zh="永远在一起">Together Forever</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item rounded-lg overflow-hidden cursor-pointer aspect-[4/3]" onclick="openLightbox(3)">
+                    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop" alt="Couple 4" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                        <p class="text-white font-body italic" data-en="Golden Hour" data-zh="金色时光">Golden Hour</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item rounded-lg overflow-hidden cursor-pointer aspect-[3/4]" onclick="openLightbox(4)">
+                    <img src="https://images.unsplash.com/photo-1520854221256-17451cc330e7?w=600&h=800&fit=crop" alt="Couple 5" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                        <p class="text-white font-body italic" data-en="Laughter & Love" data-zh="欢笑与爱">Laughter & Love</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item rounded-lg overflow-hidden cursor-pointer aspect-[4/3]" onclick="openLightbox(5)">
+                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&h=600&fit=crop" alt="Couple 6" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                        <p class="text-white font-body italic" data-en="With Mochi" data-zh="和Mochi一起">With Mochi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white text-4xl hover:text-softgold transition-colors z-50" onclick="closeLightbox()">&times;</button>
+        <img id="lightboxImg" src="" alt="Gallery" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl">
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-4">
+            <button class="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white hover:bg-white/40 transition" onclick="event.stopPropagation(); navigateLightbox(-1)">←</button>
+            <button class="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white hover:bg-white/40 transition" onclick="event.stopPropagation(); navigateLightbox(1)">→</button>
+        </div>
+    </div>
+
+    <!-- ================= SECTION 05: WEDDING DAY SCHEDULE ================= -->
+    <section id="section05" class="relative py-32 scroll-section">
+        <div class="absolute inset-0 bg-gradient-to-b from-cream via-lavender/20 to-palepink"></div>
+        
+        <div class="relative z-10 px-6 max-w-5xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <span class="page-number text-6xl md:text-8xl font-serif font-light opacity-20 absolute -top-8 left-1/2 transform -translate-x-1/2">05</span>
+                <h2 class="font-elegant text-4xl md:text-6xl shimmer-text mb-4" data-en="Wedding Day Schedule" data-zh="婚礼日程">Wedding Day Schedule</h2>
+                <p class="text-deeprose/60 font-body italic" data-en="A day filled with love, joy, and celebration" data-zh="充满爱、喜悦和庆祝的一天">A day filled with love, joy, and celebration</p>
+            </div>
+
+            <div class="relative">
+                <div class="timeline-line absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-0.5 h-full"></div>
+
+                <div class="space-y-16">
+                    <!-- Event 1 -->
+                    <div class="relative flex items-center section-reveal">
+                        <div class="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-10 h-10 rounded-full bg-warmwhite border border-softgold flex items-center justify-center z-10 shadow-md">
+                            <svg class="w-5 h-5 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <div class="ml-24 md:ml-0 md:w-1/2 md:pr-20 md:text-right">
+                            <span class="text-softgold font-serif text-lg">3:00 PM</span>
+                            <h3 class="font-elegant text-2xl text-deeprose mt-1 mb-2" data-en="Guest Arrival" data-zh="宾客到达">Guest Arrival</h3>
+                            <p class="text-deeprose/60 font-body" data-en="Welcome drinks & live acoustic music" data-zh="欢迎饮品 & 现场原声音乐">Welcome drinks & live acoustic music</p>
+                        </div>
+                    </div>
+
+                    <!-- Event 2 -->
+                    <div class="relative flex items-center section-reveal">
+                        <div class="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-10 h-10 rounded-full bg-warmwhite border border-softgold flex items-center justify-center z-10 shadow-md">
+                            <svg class="w-5 h-5 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="ml-24 md:ml-0 md:w-1/2 md:pl-20 md:text-left">
+                            <span class="text-softgold font-serif text-lg">4:00 PM</span>
+                            <h3 class="font-elegant text-2xl text-deeprose mt-1 mb-2" data-en="The Ceremony" data-zh="婚礼仪式">The Ceremony</h3>
+                            <p class="text-deeprose/60 font-body" data-en="Exchange of vows in our garden sanctuary" data-zh="在我们的花园圣殿交换誓言">Exchange of vows in our garden sanctuary</p>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="relative flex items-center section-reveal">
+                        <div class="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-10 h-10 rounded-full bg-warmwhite border border-softgold flex items-center justify-center z-10 shadow-md">
+                            <svg class="w-5 h-5 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+                        </div>
+                        <div class="ml-24 md:ml-0 md:w-1/2 md:pr-20 md:text-right">
+                            <span class="text-softgold font-serif text-lg">5:30 PM</span>
+                            <h3 class="font-elegant text-2xl text-deeprose mt-1 mb-2" data-en="Cocktail Hour" data-zh="鸡尾酒时间">Cocktail Hour</h3>
+                            <p class="text-deeprose/60 font-body" data-en="Gourmet bites & signature cocktails" data-zh="美食小吃 & 特色鸡尾酒">Gourmet bites & signature cocktails</p>
+                        </div>
+                    </div>
+
+                    <!-- Event 4 -->
+                    <div class="relative flex items-center section-reveal">
+                        <div class="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-10 h-10 rounded-full bg-warmwhite border border-softgold flex items-center justify-center z-10 shadow-md">
+                            <svg class="w-5 h-5 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.46L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 3.72 2.43 6.42V21c0 .79.58 1.44 1.36 1.44zM1 21.99v-1h14.03v1H1zm14.03-7.5c0-3.5-2.5-6-6-6H1V5h14v9.49z"/></svg>
+                        </div>
+                        <div class="ml-24 md:ml-0 md:w-1/2 md:pl-20 md:text-left">
+                            <span class="text-softgold font-serif text-lg">7:00 PM</span>
+                            <h3 class="font-elegant text-2xl text-deeprose mt-1 mb-2" data-en="Dinner & Toasts" data-zh="晚宴 & 祝酒">Dinner & Toasts</h3>
+                            <p class="text-deeprose/60 font-body" data-en="Five-course feast with heartfelt speeches" data-zh="五道式盛宴与真挚的致辞">Five-course feast with heartfelt speeches</p>
+                        </div>
+                    </div>
+
+                    <!-- Event 5 -->
+                    <div class="relative flex items-center section-reveal">
+                        <div class="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-10 h-10 rounded-full bg-warmwhite border border-softgold flex items-center justify-center z-10 shadow-md">
+                            <svg class="w-5 h-5 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        </div>
+                        <div class="ml-24 md:ml-0 md:w-1/2 md:pr-20 md:text-right">
+                            <span class="text-softgold font-serif text-lg">9:00 PM</span>
+                            <h3 class="font-elegant text-2xl text-deeprose mt-1 mb-2" data-en="Dance & Celebration" data-zh="舞会 & 庆祝">Dance & Celebration</h3>
+                            <p class="text-deeprose/60 font-body" data-en="First dance & party until midnight" data-zh="第一支舞 & 狂欢至午夜">First dance & party until midnight</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 06: VENUE & LOCATION ================= -->
+    <section id="section06" class="relative py-32 scroll-section">
+        <div class="absolute inset-0 bg-gradient-to-b from-palepink to-cream"></div>
+        
+        <div class="relative z-10 px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <span class="page-number text-6xl md:text-8xl font-serif font-light opacity-20 absolute -top-8 left-1/2 transform -translate-x-1/2">06</span>
+                <h2 class="font-elegant text-4xl md:text-6xl shimmer-text mb-4" data-en="Venue & Location" data-zh="场地与位置">Venue & Location</h2>
+                <p class="text-deeprose/60 font-body italic" data-en="Where our forever begins" data-zh="我们永远开始的地方">Where our forever begins</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Venue Info -->
+                <div class="section-reveal space-y-8">
+                    <div class="text-center lg:text-left">
+                        <h3 class="font-elegant text-3xl md:text-4xl text-deeprose mb-3" data-en="The Rose Garden Estate" data-zh="玫瑰庄园">The Rose Garden Estate</h3>
+                        <p class="text-deeprose/70 font-body leading-relaxed mb-6" 
+                           data-en="Nestled in the hills, surrounded by blooming roses and ancient trees, our venue is a dreamlike sanctuary where love stories come alive." 
+                           data-zh="坐落在山丘之中，被盛开的玫瑰和古老的树木环绕，我们的场地是一个梦幻般的圣殿，让爱情故事栩栩如生。">
+                            Nestled in the hills, surrounded by blooming roses and ancient trees, our venue is a dreamlike sanctuary where love stories come alive.
+                        </p>
+                        
+                        <div class="space-y-3 text-deeprose/70 font-body">
+                            <p class="flex items-start lg:items-center space-x-3">
+                                <svg class="w-5 h-5 text-softgold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>123 Blossom Hill Road, Rose Valley, CA 90210</span>
+                            </p>
+                            <p class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-softgold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span data-en="Ceremony starts at 4:00 PM" data-zh="仪式下午4:00开始">Ceremony starts at 4:00 PM</span>
+                            </p>
+                            <p class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-softgold" fill="currentColor" viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                                <span data-en="Complimentary parking available" data-zh="提供免费停车位">Complimentary parking available</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Cat Decorations -->
+                    <div class="flex justify-center lg:justify-start space-x-6 opacity-30">
+                        <svg class="w-12 h-12 text-softgold animate-float" fill="currentColor" viewBox="0 0 100 100">
+                            <ellipse cx="50" cy="55" rx="30" ry="35" opacity="0.6"/>
+                            <path d="M25 35 L30 20 L40 35" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M60 35 L70 20 L75 35" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="40" cy="45" r="3"/>
+                            <circle cx="60" cy="45" r="3"/>
+                        </svg>
+                        <svg class="w-10 h-10 text-mauve animate-float-slow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                </div>
+
+                <!-- Google Maps -->
+                <div class="section-reveal h-96 lg:h-[500px] rounded-lg overflow-hidden shadow-xl">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.733236988593!2d-118.24531668495456!3d34.05223418060609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c649441a88b1%3A0x67c0596734584a1c!2sLos%20Angeles%2C%20CA!5e0!3m2!1sen!2sus!4v1635959567400!5m2!1sen!2sus"
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; filter: saturate(0.8) brightness(1.1) sepia(0.1);" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 07: RSVP ================= -->
+    <section id="section07" class="relative py-32 scroll-section">
+        <div class="absolute inset-0 bg-gradient-to-b from-cream via-lavender/30 to-palepink"></div>
+        
+        <div class="relative z-10 px-6 max-w-3xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <span class="page-number text-6xl md:text-8xl font-serif font-light opacity-20 absolute -top-8 left-1/2 transform -translate-x-1/2">07</span>
+                <h2 class="font-elegant text-4xl md:text-6xl shimmer-text mb-4" data-en="RSVP" data-zh="回复邀请">RSVP</h2>
+                <p class="text-deeprose/60 font-body italic" data-en="We'd love to celebrate with you" data-zh="我们期待与您共同庆祝">We'd love to celebrate with you</p>
+                <p class="text-sm text-muted mt-2" data-en="Please respond by September 1, 2025" data-zh="请于2025年9月1日前回复">Please respond by September 1, 2025</p>
+            </div>
+
+            <!-- RSVP Form -->
+            <form id="rsvpForm" class="section-reveal space-y-8" onsubmit="handleRSVP(event)">
+                <!-- Name -->
+                <div class="text-center">
+                    <label class="block text-sm tracking-widest text-muted uppercase mb-3 font-body" data-en="Your Name" data-zh="您的姓名">Your Name</label>
+                    <input type="text" name="name" required 
+                           class="form-input w-full max-w-md mx-auto px-6 py-4 rounded-full text-center font-body text-lg"
+                           placeholder="Enter your name / 输入您的姓名">
+                </div>
+
+                <!-- Attendance -->
+                <div class="text-center">
+                    <label class="block text-sm tracking-widest text-muted uppercase mb-4 font-body" data-en="Will You Attend?" data-zh="您将出席吗？">Will You Attend?</label>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="attendance" value="yes" required class="hidden peer">
+                            <span class="px-8 py-3 rounded-full border border-softgold/30 text-deeprose/60 font-body peer-checked:bg-softgold/20 peer-checked:border-softgold peer-checked:text-deeprose transition-all duration-300 hover:border-softgold" data-en="Joyfully Accept" data-zh="欣然接受">Joyfully Accept</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="attendance" value="maybe" class="hidden peer">
+                            <span class="px-8 py-3 rounded-full border border-softgold/30 text-deeprose/60 font-body peer-checked:bg-softgold/20 peer-checked:border-softgold peer-checked:text-deeprose transition-all duration-300 hover:border-softgold" data-en="Maybe" data-zh="不确定">Maybe</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="attendance" value="no" class="hidden peer">
+                            <span class="px-8 py-3 rounded-full border border-softgold/30 text-deeprose/60 font-body peer-checked:bg-softgold/20 peer-checked:border-softgold peer-checked:text-deeprose transition-all duration-300 hover:border-softgold" data-en="Regretfully Decline" data-zh="遗憾谢绝">Regretfully Decline</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Guest Count -->
+                <div class="text-center">
+                    <label class="block text-sm tracking-widest text-muted uppercase mb-3 font-body" data-en="Number of Guests" data-zh="宾客人数">Number of Guests</label>
+                    <select name="guests" class="form-input w-full max-w-md mx-auto px-6 py-4 rounded-full text-center font-body text-lg appearance-none cursor-pointer">
+                        <option value="1" data-en="1 Guest" data-zh="1位宾客">1 Guest</option>
+                        <option value="2" data-en="2 Guests" data-zh="2位宾客">2 Guests</option>
+                        <option value="3" data-en="3 Guests" data-zh="3位宾客">3 Guests</option>
+                        <option value="4" data-en="4 Guests" data-zh="4位宾客">4 Guests</option>
+                    </select>
+                </div>
+
+                <!-- Dietary Restrictions -->
+                <div class="text-center">
+                    <label class="block text-sm tracking-widest text-muted uppercase mb-3 font-body" data-en="Dietary Restrictions" data-zh="饮食限制">Dietary Restrictions</label>
+                    <textarea name="dietary" rows="3" 
+                              class="form-input w-full max-w-md mx-auto px-6 py-4 rounded-2xl text-center font-body text-lg resize-none"
+                              placeholder="Any allergies or preferences / 过敏或偏好"
+                              data-en-placeholder="Any allergies or preferences" data-zh-placeholder="过敏或偏好"></textarea>
+                </div>
+
+                <!-- Message -->
+                <div class="text-center">
+                    <label class="block text-sm tracking-widest text-muted uppercase mb-3 font-body" data-en="A Message for the Couple" data-zh="给新人的留言">A Message for the Couple</label>
+                    <textarea name="message" rows="4" 
+                              class="form-input w-full max-w-md mx-auto px-6 py-4 rounded-2xl text-center font-body text-lg resize-none"
+                              placeholder="Share your wishes / 分享您的祝福"
+                              data-en-placeholder="Share your wishes" data-zh-placeholder="分享您的祝福"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center pt-4">
+                    <button type="submit" 
+                            class="btn-submit px-12 py-4 rounded-full text-lg font-body tracking-wider text-white shadow-lg">
+                        <span data-en="Send Our Love" data-zh="发送祝福">Send Our Love</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Success Message (Hidden by default) -->
+            <div id="successMessage" class="hidden text-center py-12">
+                <div class="success-checkmark w-20 h-20 mx-auto mb-6 rounded-full bg-softgold/20 flex items-center justify-center">
+                    <svg class="w-10 h-10 text-softgold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <h3 class="font-elegant text-3xl text-deeprose mb-3" data-en="Thank You!" data-zh="谢谢您！">Thank You!</h3>
+                <p class="text-deeprose/70 font-body" data-en="Your response has been received. We can't wait to celebrate with you!" data-zh="已收到您的回复。我们期待与您共同庆祝！">Your response has been received. We can't wait to celebrate with you!</p>
+                <div class="mt-6 flex justify-center space-x-4 opacity-40">
+                    <svg class="w-8 h-8 text-mauve animate-float" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <svg class="w-6 h-6 text-softgold animate-float-slow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <svg class="w-8 h-8 text-mauve animate-float" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative py-20 text-center">
+        <div class="absolute inset-0 bg-gradient-to-b from-palepink to-warmwhite"></div>
+        <div class="relative z-10 px-6">
+            <div class="flex justify-center space-x-6 mb-8 opacity-40">
+                <svg class="w-10 h-10 text-softgold animate-float" fill="currentColor" viewBox="0 0 100 100">
+                    <ellipse cx="50" cy="55" rx="30" ry="35"/>
+                    <path d="M25 35 L30 20 L40 35" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M60 35 L70 20 L75 35" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="40" cy="45" r="3"/>
+                    <circle cx="60" cy="45" r="3"/>
+                </svg>
+                <svg class="w-8 h-8 text-mauve animate-float-slow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="w-10 h-10 text-softgold animate-float" fill="currentColor" viewBox="0 0 100 100">
+                    <ellipse cx="50" cy="55" rx="30" ry="35"/>
+                    <path d="M25 35 L30 20 L40 35" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M60 35 L70 20 L75 35" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="40" cy="45" r="3"/>
+                    <circle cx="60" cy="45" r="3"/>
+                </svg>
+            </div>
+            <p class="font-elegant text-2xl md:text-3xl shimmer-text mb-4" data-en="Ming & Luna" data-zh="明 & 露娜">Ming & Luna</p>
+            <p class="text-deeprose/60 font-body text-sm" data-en="Forever starts with you" data-zh="永远从你开始">Forever starts with you</p>
+            <p class="text-muted text-xs mt-8 font-body tracking-widest uppercase">© 2025 Wedding Invitation</p>
+        </div>
+    </footer>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // ===== LANGUAGE SWITCHING =====
+        let currentLang = 'en';
+        
+        function switchLang(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+            
+            // Update toggle buttons
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+            document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const text = el.getAttribute(`data-${lang}`);
+                if (text) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        // Skip, handled below
+                    } else {
+                        el.textContent = text;
+                    }
+                }
+            });
+
+            // Update placeholders
+            document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+                const placeholder = el.getAttribute(`data-${lang}-placeholder`);
+                if (placeholder) {
+                    el.placeholder = placeholder;
+                }
+            });
+
+            // Store preference
+            localStorage.setItem('preferredLang', lang);
+        }
+
+        // Load saved language
+        const savedLang = localStorage.getItem('preferredLang');
+        if (savedLang) {
+            switchLang(savedLang);
+        }
+
+        // ===== MUSIC CONTROL =====
+        let isPlaying = false;
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = document.getElementById('musicIcon');
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicToggle.classList.remove('playing');
+                musicIcon.innerHTML = '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>';
+            } else {
+                bgMusic.play().catch(e => console.log('Autoplay prevented'));
+                musicToggle.classList.add('playing');
+                musicIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Autoplay after first interaction
+        document.addEventListener('click', function autoPlayMusic() {
+            if (!isPlaying) {
+                toggleMusic();
+                document.removeEventListener('click', autoPlayMusic);
+            }
+        }, { once: true });
+
+        // ===== LANDING PAGE TRANSITION =====
+        function startExperience() {
+            const paw = document.getElementById('pawButton');
+            const landing = document.getElementById('section01');
+            
+            // Paw click animation
+            paw.style.transform = 'scale(0.8)';
+            setTimeout(() => paw.style.transform = 'scale(1.1)', 200);
+            setTimeout(() => paw.style.transform = 'scale(1)', 400);
+
+            // Create particle burst
+            createParticleBurst(paw);
+
+            // Fade out landing
+            gsap.to(landing, {
+                opacity: 0,
+                scale: 1.05,
+                duration: 1.2,
+                ease: 'power2.inOut',
+                delay: 0.3,
+                onComplete: () => {
+                    landing.style.display = 'none';
+                    // Scroll to next section
+                    document.getElementById('section02').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            // Start music if not already
+            if (!isPlaying) {
+                toggleMusic();
+            }
+        }
+
+        function createParticleBurst(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.innerHTML = ['❤', '🐾', '✨', '💕'][Math.floor(Math.random() * 4)];
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.fontSize = (15 + Math.random() * 20) + 'px';
+                particle.style.position = 'fixed';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '100';
+                document.body.appendChild(particle);
+
+                const angle = (Math.PI * 2 * i) / 20;
+                const distance = 100 + Math.random() * 200;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+
+                gsap.to(particle, {
+                    x: x,
+                    y: y,
+                    opacity: 0,
+                    scale: 0,
+                    duration: 1.5 + Math.random(),
+                    ease: 'power2.out',
+                    onComplete: () => particle.remove()
+                });
+            }
+        }
+
+        // ===== FLOATING PARTICLES =====
+        function createFloatingParticles() {
+            const container = document.getElementById('particles');
+            const symbols = ['❤', '🐾', '✨', '💕', '🌸', '💖'];
+            
+            setInterval(() => {
+                if (document.hidden) return;
+                
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = '100%';
+                particle.style.fontSize = (10 + Math.random() * 15) + 'px';
+                particle.style.opacity = 0.3 + Math.random() * 0.4;
+                particle.style.animationDuration = (8 + Math.random() * 12) + 's';
+                container.appendChild(particle);
+
+                gsap.to(particle, {
+                    y: -window.innerHeight - 100,
+                    x: (Math.random() - 0.5) * 200,
+                    rotation: Math.random() * 360,
+                    duration: 10 + Math.random() * 15,
+                    ease: 'none',
+                    onComplete: () => particle.remove()
+                });
+            }, 800);
+        }
+
+        // ===== PAW TRAIL ON MOUSE MOVE =====
+        let lastPawTime = 0;
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastPawTime < 300) return;
+            lastPawTime = now;
+
+            const paw = document.createElement('div');
+            paw.className = 'paw-trail';
+            paw.innerHTML = '🐾';
+            paw.style.left = e.pageX + 'px';
+            paw.style.top = e.pageY + 'px';
+            paw.style.fontSize = '20px';
+            paw.style.opacity = '0.3';
+            document.body.appendChild(paw);
+
+            setTimeout(() => paw.remove(), 2000);
+        });
+
+        // ===== GSAP SCROLL ANIMATIONS =====
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Section reveals
+        document.querySelectorAll('.section-reveal').forEach((el, i) => {
+            gsap.fromTo(el, 
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        end: 'bottom 15%',
+                        toggleActions: 'play none none reverse'
+                    }
+                }
+            );
+        });
+
+        // Parallax for gallery items
+        document.querySelectorAll('.gallery-item').forEach((item, i) => {
+            gsap.fromTo(item,
+                { y: 50 * (i % 3), opacity: 0.5 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 90%',
+                        end: 'top 50%',
+                        scrub: 1
+                    }
+                }
+            );
+        });
+
+        // Timeline items stagger
+        document.querySelectorAll('#section03 .section-reveal').forEach((item, i) => {
+            gsap.fromTo(item,
+                { opacity: 0, x: i % 2 === 0 ? -30 : 30 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    delay: i * 0.2,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    }
+                }
+            );
+        });
+
+        // ===== LIGHTBOX =====
+        const galleryImages = [
+            'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&fit=crop',
+            'https://images.unsplash.com/photo-1529634597503-139d3726fed5?w=1200&fit=crop',
+            'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&fit=crop',
+            'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&fit=crop',
+            'https://images.unsplash.com/photo-1520854221256-17451cc330e7?w=1200&fit=crop',
+            'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1200&fit=crop'
+        ];
+        let currentImageIndex = 0;
+
+        function openLightbox(index) {
+            currentImageIndex = index;
+            document.getElementById('lightboxImg').src = galleryImages[index];
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function navigateLightbox(direction) {
+            currentImageIndex = (currentImageIndex + direction + galleryImages.length) % galleryImages.length;
+            document.getElementById('lightboxImg').src = galleryImages[currentImageIndex];
+        }
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navigateLightbox(-1);
+            if (e.key === 'ArrowRight') navigateLightbox(1);
+        });
+
+        // ===== RSVP FORM HANDLING =====
+        function handleRSVP(e) {
+            e.preventDefault();
+            
+            const form = document.getElementById('rsvpForm');
+            const successMsg = document.getElementById('successMessage');
+            
+            // Animate form out
+            gsap.to(form, {
+                opacity: 0,
+                y: -30,
+                duration: 0.5,
+                ease: 'power2.in',
+                onComplete: () => {
+                    form.style.display = 'none';
+                    successMsg.classList.remove('hidden');
+                    successMsg.style.display = 'block';
+                    
+                    // Animate success message in
+                    gsap.fromTo(successMsg, 
+                        { opacity: 0, y: 30, scale: 0.95 },
+                        { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out' }
+                    );
+                    
+                    // Create celebration particles
+                    for (let i = 0; i < 15; i++) {
+                        setTimeout(() => {
+                            const particle = document.createElement('div');
+                            particle.className = 'particle';
+                            particle.innerHTML = ['🎉', '✨', '❤', '🐾'][Math.floor(Math.random() * 4)];
+                            particle.style.left = (20 + Math.random() * 60) + '%';
+                            particle.style.top = (40 + Math.random() * 20) + '%';
+                            particle.style.fontSize = (20 + Math.random() * 20) + 'px';
+                            particle.style.position = 'fixed';
+                            particle.style.pointerEvents = 'none';
+                            particle.style.zIndex = '50';
+                            document.body.appendChild(particle);
+                            
+                            gsap.to(particle, {
+                                y: -200 - Math.random() * 200,
+                                x: (Math.random() - 0.5) * 300,
+                                opacity: 0,
+                                rotation: Math.random() * 360,
+                                duration: 2 + Math.random() * 2,
+                                ease: 'power2.out',
+                                onComplete: () => particle.remove()
+                            });
+                        }, i * 100);
+                    }
+                }
+            });
+            
+            // In production, you would send form data to a server here
+            console.log('RSVP submitted:', Object.fromEntries(new FormData(form)));
+        }
+
+        // ===== NAVIGATION SCROLL EFFECT =====
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.style.padding = '0.5rem 0';
+                navbar.style.boxShadow = '0 4px 30px rgba(139, 90, 90, 0.1)';
+            } else {
+                navbar.style.padding = '1rem 0';
+                navbar.style.boxShadow = '0 4px 30px rgba(139, 90, 90, 0.05)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // ===== ACTIVE NAV LINK HIGHLIGHTING =====
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 200;
+                if (window.pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ===== INITIALIZE =====
+        window.addEventListener('load', () => {
+            createFloatingParticles();
+            
+            // Animate landing elements on load
+            gsap.from('#section01 h1', {
+                opacity: 0,
+                y: 30,
+                duration: 1.5,
+                ease: 'power3.out',
+                delay: 0.5
+            });
+            
+            gsap.from('#section01 .paw-button', {
+                opacity: 0,
+                scale: 0.8,
+                duration: 1.2,
+                ease: 'back.out(1.7)',
+                delay: 1
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            ScrollTrigger.refresh();
+        });
+    </script>
+</body>
+</html>

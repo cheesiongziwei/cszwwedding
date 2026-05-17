@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们结婚啦 🐱💕</title>
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #ff8fa3;
+            --bg-grad: linear-gradient(135deg, #ffeef8 0%, #fff5f0 100%);
+            --text-dark: #4a4a4a;
+            --text-light: #888;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-grad);
+            color: var(--text-dark);
+        }
+
+        /* ========== 开场页面 ========== */
+        #entrance {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(135deg, #ffd6e7 0%, #ffe5d6 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .entrance-title { font-size: 2.2rem; color: #fff; text-shadow: 2px 2px 6px rgba(0,0,0,0.15); margin-bottom: 2rem; }
+        .cat-paw-button {
+            width: 150px; height: 150px; background: linear-gradient(135deg, #ff8fa3 0%, #ff6b6b 100%);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease; animation: bounce 2s infinite; position: relative;
+        }
+        .cat-paw-button:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6); }
+        .cat-paw-button:active { transform: scale(0.95); }
+        .paw-icon { font-size: 4rem; color: white; }
+        .paw-text { position: absolute; bottom: -45px; color: #fff; font-size: 1rem; white-space: nowrap; }
+
+        /* ========== 主页面 ========== */
+        #main-content { display: none; opacity: 0; transition: opacity 1s ease; }
+
+        /* 🐾 顶部 Header */
+        .wedding-header {
+            background: linear-gradient(180deg, #fff5f8 0%, #ffffff 100%);
+            padding: 80px 20px 50px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px dashed rgba(255, 143, 163, 0.3);
+        }
+        .header-deco { font-size: 2.2rem; animation: float 4s ease-in-out infinite; display: inline-block; margin-bottom: 10px; }
+        .couple-names {
+            font-size: 3.2rem; color: var(--primary); font-weight: 700; margin: 10px 0 5px;
+            letter-spacing: 4px; font-family: 'Georgia', 'PingFang SC', serif;
+        }
+        .header-subtitle { font-size: 1.15rem; color: var(--text-light); letter-spacing: 4px; margin-top: 8px; }
+        .header-divider { display: flex; justify-content: center; gap: 12px; font-size: 1.4rem; opacity: 0.7; margin-top: 20px; }
+
+        /* 💌 邀请言卡片 */
+        .invite-card {
+            max-width: 560px;
+            margin: 30px auto 10px;
+            padding: 22px 28px;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 18px;
+            border: 1.5px dashed rgba(255, 107, 107, 0.35);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 20px rgba(255, 143, 163, 0.15);
+            transition: transform 0.3s ease;
+        }
+        .invite-card:hover { transform: translateY(-3px); }
+        .invite-line { margin: 6px 0; line-height: 1.6; color: #5a5a5a; }
+        .invite-intro { font-size: 1.05rem; color: #777; }
+        .invite-main { font-size: 1.25rem; font-weight: 500; color: #4a4a4a; margin: 10px 0; }
+        .invite-paw { font-size: 1.1rem; color: var(--secondary); margin-top: 8px; }
+
+        /* 🐱 随机靠边浮动猫 */
+        .floating-cat {
+            position: fixed; z-index: 20; pointer-events: none;
+            width: 75px; height: 75px;
+            opacity: 0.6;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+            will-change: transform;
+            transition: transform 0.3s ease;
+        }
+        .floating-cat img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+        /* 婚纱照展示区 */
+        .photo-section { min-height: 90vh; display: flex; align-items: center; justify-content: center; padding: 60px 20px; position: relative; }
+        .photo-container {
+            max-width: 1100px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
+            align-items: center; opacity: 0; transform: translateY(60px); transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .photo-container.visible { opacity: 1; transform: translateY(0); }
+        .photo-container.reverse { direction: rtl; }
+        .photo-container.reverse > * { direction: ltr; }
+
+        .photo-wrapper {
+            position: relative; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.12); transform: rotate(-2deg); transition: transform 0.4s ease;
+        }
+        .photo-wrapper:hover { transform: rotate(0deg) scale(1.02); }
+        .photo-wrapper img { width: 100%; height: 480px; object-fit: cover; display: block; background: #f0e6e8; }
+
+        .text-content { padding: 20px 10px; }
+        .photo-number { font-size: 4.5rem; color: rgba(255, 143, 163, 0.25); font-weight: 800; line-height: 1; margin-bottom: 15px; }
+        .romantic-quote {
+            font-size: 1.6rem; color: var(--text-dark); line-height: 1.8; margin-bottom: 20px; font-style: italic; position: relative; padding-left: 25px;
+        }
+        .romantic-quote::before { content: '"'; position: absolute; left: -10px; top: -25px; font-size: 4rem; color: var(--secondary); opacity: 0.4; font-family: serif; }
+        .photo-desc { font-size: 1rem; color: var(--text-light); line-height: 1.6; }
+
+        .heart-deco { position: absolute; font-size: 2rem; animation: heartbeat 2.5s infinite; opacity: 0.8; }
+
+        /* 底部信息 */
+        .wedding-info { background: linear-gradient(180deg, #fff 0%, #fff5f0 100%); padding: 80px 20px 100px; text-align: center; }
+        .info-card { max-width: 850px; margin: 0 auto; background: white; padding: 60px 40px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.08); }
+        .info-title { font-size: 2.2rem; color: var(--primary); margin-bottom: 30px; }
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 30px; }
+        .info-item { padding: 25px; background: #fff8f8; border-radius: 16px; transition: transform 0.3s; }
+        .info-item:hover { transform: translateY(-5px); }
+        .info-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .info-label { color: var(--text-light); margin-bottom: 8px; font-size: 0.95rem; }
+        .info-value { font-size: 1.2rem; font-weight: 600; color: var(--text-dark); }
+
+        /* 动画 */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 25% { transform: translateY(-15px) rotate(5deg); } 75% { transform: translateY(-8px) rotate(-5deg); } }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .couple-names { font-size: 2.2rem; }
+            .invite-card { margin: 25px 15px 10px; padding: 18px 20px; }
+            .invite-main { font-size: 1.15rem; }
+            .photo-container { grid-template-columns: 1fr; gap: 30px; }
+            .photo-wrapper img { height: 350px; }
+            .romantic-quote { font-size: 1.3rem; }
+            .info-grid { grid-template-columns: 1fr; }
+            .floating-cat { width: 50px; height: 50px; opacity: 0.35; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 1. 猫爪开门 -->
+    <div id="entrance">
+        <div class="entrance-content" style="text-align: center; animation: fadeInUp 1.2s ease;">
+            <h1 class="entrance-title">🐱 点击猫爪开启幸福 🐱</h1>
+            <div class="cat-paw-button" onclick="enterWedding()">
+                <span class="paw-icon">🐾</span>
+                <span class="paw-text">点击进入我们的世界</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 主页面 -->
+    <div id="main-content">
+        <header class="wedding-header">
+            <div class="header-deco">🐾</div>
+            <h1 class="couple-names">林小明 & 林小美</h1>
+            
+            <!-- 💌 邀请言区域 -->
+            <div class="invite-card">
+                <p class="invite-line invite-intro">从相识到相守，每一步都有您的陪伴与祝福</p>
+                <p class="invite-line invite-main">在这特别的日子里<br>诚挚邀请您前来见证我们的幸福时刻</p>
+                <p class="invite-line invite-paw">🐾 恭候您的光临 🐾</p>
+            </div>
+
+            <p class="header-subtitle">婚礼 · 诚邀见证</p>
+            <div class="header-divider"><span>🌸</span><span>🐱</span><span>🌸</span></div>
+        </header>
+
+        <!-- 🐱 5只猫咪（位置由JS完全随机生成） -->
+        <div class="floating-cat"></div>
+        <div class="floating-cat"></div>
+        <div class="floating-cat"></div>
+        <div class="floating-cat"></div>
+        <div class="floating-cat"></div>
+
+        <!-- 📸 婚纱照 1 -->
+        <section class="photo-section">
+            <div class="heart-deco" style="top: 12%; right: 8%;">💕</div>
+            <div class="photo-container">
+                <div class="photo-wrapper">
+                    <div style="width:100%;height:480px;background:#f5e6e8;display:flex;align-items:center;justify-content:center;color:#999;">📷 婚纱照 1</div>
+                </div>
+                <div class="text-content">
+                    <div class="photo-number">01</div>
+                    <div class="romantic-quote">入目无别人，四下皆是你。从初见时的怦然心动，到此刻的执手相看，你就是我此生最美的遇见。</div>
+                    <div class="photo-desc">所爱如山海，烟火伴长明。愿与你一起，把平凡的日子过成诗。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📸 婚纱照 2 -->
+        <section class="photo-section">
+            <div class="heart-deco" style="bottom: 18%; left: 5%;">💖</div>
+            <div class="photo-container reverse">
+                <div class="photo-wrapper">
+                    <div style="width:100%;height:480px;background:#f5e6e8;display:flex;align-items:center;justify-content:center;color:#999;">📷 婚纱照 2</div>
+                </div>
+                <div class="text-content">
+                    <div class="photo-number">02</div>
+                    <div class="romantic-quote">幸得识卿桃花面，从此阡陌多暖意。时间得意，春风嘉许，我遇上你，就是人间值得。</div>
+                    <div class="photo-desc">一起变成可爱的老头老太吧，牵着手看遍世间风景。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📸 婚纱照 3 -->
+        <section class="photo-section">
+            <div class="heart-deco" style="top: 15%; right: 6%;">💗</div>
+            <div class="photo-container">
+                <div class="photo-wrapper">
+                    <div style="width:100%;height:480px;background:#f5e6e8;display:flex;align-items:center;justify-content:center;color:#999;">📷 婚纱照 3</div>
+                </div>
+                <div class="text-content">
+                    <div class="photo-number">03</div>
+                    <div class="romantic-quote">因为我不知道，下一辈子还是否能遇见你，所以我今生才会那么努力，把最好的都给你。</div>
+                    <div class="photo-desc">蓄谋已久，得偿所愿。万家灯火，终于有一盏为我们而亮。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📸 婚纱照 4 -->
+        <section class="photo-section">
+            <div class="heart-deco" style="bottom: 22%; left: 7%;">💓</div>
+            <div class="photo-container reverse">
+                <div class="photo-wrapper">
+                    <div style="width:100%;height:480px;background:#f5e6e8;display:flex;align-items:center;justify-content:center;color:#999;">📷 婚纱照 4</div>
+                </div>
+                <div class="text-content">
+                    <div class="photo-number">04</div>
+                    <div class="romantic-quote">时光静好，与君偕老。关于爱的画面，是与你在一起的每一帧日常。</div>
+                    <div class="photo-desc">喜乐有分享，共度日月长。我的标准答案，一直都是你。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📸 婚纱照 5 -->
+        <section class="photo-section">
+            <div class="heart-deco" style="top: 8%; left: 9%;">💝</div>
+            <div class="photo-container">
+                <div class="photo-wrapper">
+                    <div style="width:100%;height:480px;background:#f5e6e8;display:flex;align-items:center;justify-content:center;color:#999;">📷 婚纱照 5</div>
+                </div>
+                <div class="text-content">
+                    <div class="photo-number">05</div>
+                    <div class="romantic-quote">有生之年，欣喜相逢。人间美好，日落和你，皆是风景。</div>
+                    <div class="photo-desc">今日关键词：我们。执子之手，与子偕老。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 💌 底部信息 -->
+        <section class="wedding-info">
+            <div class="info-card">
+                <h2 class="info-title">💌 诚挚邀请</h2>
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 15px; line-height: 1.8;">
+                    有生之年，只诉温暖不言殇<br>诚邀您见证我们的幸福时刻
+                </p>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-icon">📅</div><div class="info-label">婚礼日期</div><div class="info-value">2026.10.18</div></div>
+                    <div class="info-item"><div class="info-icon">🕐</div><div class="info-label">仪式时间</div><div class="info-value">11:08 AM</div></div>
+                    <div class="info-item"><div class="info-icon">📍</div><div class="info-label">婚礼地点</div><div class="info-value">XX酒店宴会厅</div></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 进入动画
+        function enterWedding() {
+            const entrance = document.getElementById('entrance');
+            const main = document.getElementById('main-content');
+            entrance.style.opacity = '0';
+            entrance.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                entrance.style.display = 'none';
+                main.style.display = 'block';
+                requestAnimationFrame(() => main.style.opacity = '1');
+            }, 800);
+        }
+
+        // 滚动触发显示
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.25, rootMargin: '0px 0px -80px 0px' });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 滚动监听
+            document.querySelectorAll('.photo-container').forEach(c => observer.observe(c));
+
+            // 2. 🐾 纯随机靠边分布逻辑
+            const cats = document.querySelectorAll('.floating-cat');
+            cats.forEach((cat, i) => {
+                // 垂直随机：避开顶部 Header 和底部 Footer，限制在 18% ~ 85%
+                const randomTop = 18 + Math.random() * 67;
+                cat.style.top = `${randomTop}%`;
+
+                // 左右随机分配 + 随机边缘距离 (2% ~ 6%)
+                const isLeft = Math.random() < 0.5;
+                const edgeOffset = 2 + Math.random() * 4;
+
+                if (isLeft) {
+                    cat.style.left = `${edgeOffset}%`;
+                    cat.style.right = 'auto';
+                } else {
+                    cat.style.right = `${edgeOffset}%`;
+                    cat.style.left = 'auto';
+                }
+
+                // 随机初始微旋转（-12° ~ 12°）让姿态更自然
+                const rotate = -12 + Math.random() * 24;
+                cat.style.transform = `rotate(${rotate}deg)`;
+
+                // 随机浮动动画参数
+                cat.style.animationDelay = `${Math.random() * 2.5}s`;
+                cat.style.animationDuration = `${4.5 + Math.random() * 3.5}s`;
+
+                // 📷 【替换GIF预留】：取消下方注释，并确保同目录有 cat1.gif ~ cat5.gif
+                // cat.innerHTML = `<img src="cat${i+1}.gif" alt="cat">`;
+            });
+        });
+    </script>
+</body>
+</html>

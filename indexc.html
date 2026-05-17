@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Alex &amp; Mei Ling &#8212; Wedding Invitation &#23130;&#31036;&#36153;&#35831;&#20989;</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blush:#F4C2C2;--cream:#FFF8F0;--lavender:#E8D5F5;--gold:#C9A96E;--rose:#D4829A;--deep:#B5607A;--mist:#F9F3FF;--text:#5a3e4b}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--cream);font-family:'Cormorant Garamond','Noto Serif SC',serif;color:var(--text);overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--rose);border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pawPulse{0%,100%{transform:scale(1);filter:drop-shadow(0 8px 24px rgba(212,130,154,.5))}50%{transform:scale(1.1);filter:drop-shadow(0 14px 36px rgba(212,130,154,.85))}}
+@keyframes floatCat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-22px) rotate(4deg)}}
+@keyframes floatUp{0%{transform:translateY(0) rotate(0deg) scale(.6);opacity:0}10%{opacity:.7}90%{opacity:.25}100%{transform:translateY(-110vh) rotate(400deg) scale(1.1);opacity:0}}
+@keyframes rippleOut{to{transform:scale(5);opacity:0}}
+@keyframes musicPulse{0%,100%{box-shadow:0 4px 20px rgba(180,96,122,.4)}50%{box-shadow:0 4px 30px rgba(180,96,122,.7),0 0 0 10px rgba(180,96,122,.1)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes heartBeat{0%,100%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.2)}70%{transform:scale(1)}}
+@keyframes glowPulse{0%,100%{text-shadow:0 4px 20px rgba(180,96,122,.2)}50%{text-shadow:0 4px 40px rgba(180,96,122,.5),0 0 60px rgba(201,169,110,.3)}}
+@keyframes petalFall{0%{transform:translateY(-40px) rotate(0deg);opacity:0}10%{opacity:.18}100%{transform:translateY(110vh) rotate(720deg) translateX(60px);opacity:0}}
+@keyframes successPop{0%{transform:scale(0) rotate(-10deg);opacity:0}60%{transform:scale(1.1) rotate(3deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
+#overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(155deg,#fce4ec 0%,#f3e5f5 45%,#fce4ec 75%,#fff8f0 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;transition:opacity .9s ease,visibility .9s ease}
+#overlay.gone{opacity:0;visibility:hidden;pointer-events:none}
+.ov-sub{font-size:clamp(.7rem,2vw,.85rem);letter-spacing:.35em;text-transform:uppercase;color:var(--gold);text-align:center;opacity:0;animation:fadeUp 1.2s ease .4s forwards}
+.ov-title{font-family:'Great Vibes',cursive;font-size:clamp(2.2rem,7vw,4.5rem);color:var(--deep);text-align:center;opacity:0;animation:fadeUp 1.2s ease .8s forwards;text-shadow:0 4px 20px rgba(180,96,122,.2)}
+.ov-hint{font-size:clamp(.85rem,2vw,1rem);color:#8a5a6a;text-align:center;opacity:0;animation:fadeUp 1.2s ease 1.8s forwards;letter-spacing:.06em}
+.cat-float{position:absolute;opacity:.08;pointer-events:none;animation:floatCat 9s ease-in-out infinite}
+#paw-btn{position:relative;z-index:10;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.8rem;background:none;border:none;padding:1rem;opacity:0;animation:fadeUp 1.2s ease 1.2s forwards}
+.paw-svg{width:110px;height:110px;filter:drop-shadow(0 8px 24px rgba(212,130,154,.5));animation:pawPulse 2.6s ease-in-out infinite}
+.ripple{position:absolute;border-radius:50%;background:rgba(212,130,154,.35);transform:scale(0);animation:rippleOut .9s ease-out forwards;pointer-events:none}
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s,box-shadow .4s}
+#nav.scrolled{background:rgba(255,248,240,.9);backdrop-filter:blur(14px);box-shadow:0 2px 24px rgba(212,130,154,.12)}
+.nav-logo{font-family:'Great Vibes',cursive;font-size:1.6rem;color:var(--deep);text-decoration:none}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#8a5a6a;text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--deep)}
+.lang-sw{display:flex;gap:.4rem}
+.lbtn{font-size:.72rem;letter-spacing:.1em;padding:.28rem .75rem;border:1px solid var(--gold);border-radius:20px;background:transparent;color:var(--gold);cursor:pointer;transition:all .3s;font-family:'Cormorant Garamond','Noto Serif SC',serif}
+.lbtn.on,.lbtn:hover{background:var(--gold);color:#fff}
+@media(max-width:768px){.nav-links{display:none}#nav{padding:.8rem 1.2rem}}
+section{position:relative;overflow:hidden}
+.pg{display:block;font-size:.68rem;letter-spacing:.35em;color:var(--gold);opacity:.75;margin-bottom:.4rem;font-family:'Cormorant Garamond',serif}
+.sh{text-align:center;margin-bottom:4rem}
+.sh h2{font-family:'Great Vibes',cursive;font-size:clamp(2.6rem,6vw,4.8rem);color:var(--deep);line-height:1.15}
+.sh .sub{font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:.5rem}
+.divider{display:flex;align-items:center;gap:1rem;justify-content:center;margin:1.4rem auto;max-width:320px}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold))}
+.divider::after{background:linear-gradient(to left,transparent,var(--gold))}
+.reveal{opacity:0;transform:translateY(36px)}.reveal-l{opacity:0;transform:translateX(-36px)}.reveal-r{opacity:0;transform:translateX(36px)}.reveal-s{opacity:0;transform:scale(.88)}
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9rem 2rem 7rem;background:linear-gradient(180deg,var(--cream) 0%,var(--mist) 100%);text-align:center}
+.h-names{font-family:'Great Vibes',cursive;font-size:clamp(3.8rem,11vw,9rem);color:var(--deep);line-height:1.05;text-shadow:0 6px 28px rgba(180,96,122,.18);animation:glowPulse 4s ease-in-out infinite}
+.h-amp{font-family:'Great Vibes',cursive;font-size:clamp(2rem,5vw,4rem);color:var(--gold);display:block;margin:-.5rem 0}
+.h-date{font-size:clamp(1rem,2.5vw,1.5rem);letter-spacing:.45em;color:var(--gold);text-transform:uppercase;margin-top:1.5rem}
+.h-tag{font-size:clamp(1rem,2vw,1.3rem);color:#8a5a6a;font-style:italic;margin-top:1rem;letter-spacing:.05em}
+.shimmer{background:linear-gradient(90deg,var(--gold) 0%,#e8c97a 40%,var(--gold) 60%,#e8c97a 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite}
+.hero-cta-p{padding:.8rem 2.2rem;background:linear-gradient(135deg,var(--rose),var(--deep));color:#fff;border-radius:50px;text-decoration:none;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;box-shadow:0 8px 26px rgba(180,96,122,.3);transition:all .3s;display:inline-block}
+.hero-cta-p:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(180,96,122,.42)}
+.hero-cta-s{padding:.8rem 2.2rem;border:1px solid var(--gold);color:var(--gold);border-radius:50px;text-decoration:none;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;transition:all .3s;display:inline-block}
+.hero-cta-s:hover{background:var(--gold);color:#fff}
+#story{padding:8rem 2rem;background:linear-gradient(180deg,var(--mist) 0%,rgba(252,228,236,.1) 100%)}
+.tl{position:relative;max-width:720px;margin:0 auto}
+.tl::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--gold) 15%,var(--gold) 85%,transparent);transform:translateX(-50%)}
+@media(max-width:640px){.tl::before{left:20px}}
+.tl-row{display:grid;grid-template-columns:1fr 48px 1fr;gap:1.5rem;margin-bottom:3.5rem;align-items:start}
+@media(max-width:640px){.tl-row{grid-template-columns:48px 1fr}.tl-l{display:none}}
+.tl-l{text-align:right;padding-top:.6rem}.tl-r{padding-top:.6rem}
+.tl-dot{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blush),var(--rose));display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 4px 18px rgba(212,130,154,.4);position:relative;z-index:1;flex-shrink:0}
+.tl-yr{font-size:.72rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
+.tl-ttl{font-size:1.15rem;font-weight:500;color:var(--deep);margin-bottom:.4rem}
+.tl-desc{font-size:.95rem;color:#7a5a68;line-height:1.7}
+#gallery{padding:8rem 2rem;background:linear-gradient(180deg,rgba(252,228,236,.1) 0%,var(--lavender) 50%,rgba(252,228,236,.1) 100%)}
+.gg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;max-width:1000px;margin:0 auto}
+@media(max-width:768px){.gg{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.gg{grid-template-columns:1fr}}
+.gi{position:relative;overflow:hidden;border-radius:14px;aspect-ratio:3/4;cursor:pointer}
+.gi:nth-child(2){margin-top:2.5rem}.gi:nth-child(5){margin-top:-2.5rem}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}
+.gi:hover img{transform:scale(1.09)}
+.go{position:absolute;inset:0;background:linear-gradient(to top,rgba(180,96,122,.65) 0%,transparent 55%);opacity:0;transition:opacity .4s;display:flex;align-items:flex-end;padding:1.4rem}
+.gi:hover .go{opacity:1}.gc{color:#fff;font-size:.85rem;letter-spacing:.08em}
+#lightbox{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+#lightbox.open{opacity:1;pointer-events:all}
+#lb-img{max-width:90vw;max-height:85vh;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.5);transform:scale(.88);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+#lightbox.open #lb-img{transform:scale(1)}
+#lb-close{position:absolute;top:1.5rem;right:2rem;color:#fff;font-size:2.2rem;cursor:pointer;opacity:.65;transition:opacity .3s;line-height:1}
+#lb-close:hover{opacity:1}
+#schedule{padding:8rem 2rem;background:linear-gradient(180deg,var(--cream) 0%,var(--mist) 100%)}
+.sf{max-width:580px;margin:0 auto}
+.si{display:flex;gap:1.8rem;align-items:flex-start;padding:1.6rem 0;border-bottom:1px solid rgba(201,169,110,.15)}
+.si:last-child{border-bottom:none}
+.st{min-width:78px;font-size:.82rem;letter-spacing:.1em;color:var(--gold);font-weight:500;padding-top:.25rem;flex-shrink:0}
+.sic{font-size:1.6rem;flex-shrink:0}.sttl{font-size:1.05rem;font-weight:500;color:var(--deep);margin-bottom:.2rem}.sdesc{font-size:.9rem;color:#7a5a68;line-height:1.6}
+.si{opacity:0;transform:translateX(-30px)}
+#venue{padding:8rem 2rem;background:linear-gradient(180deg,var(--mist) 0%,rgba(252,228,236,.16) 100%)}
+.vd{max-width:600px;margin:0 auto 3rem;text-align:center}
+.vn{font-family:'Great Vibes',cursive;font-size:clamp(2rem,5vw,3.5rem);color:var(--deep);margin-bottom:.8rem}
+.va{font-size:1rem;color:#7a5a68;line-height:1.8;letter-spacing:.04em}
+.mw{max-width:820px;margin:0 auto;border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(180,96,122,.15)}
+.mw iframe{width:100%;height:420px;border:none;display:block}
+#rsvp{padding:8rem 2rem 10rem;background:linear-gradient(180deg,rgba(252,228,236,.16) 0%,var(--lavender) 55%,var(--cream) 100%)}
+.rf{max-width:540px;margin:0 auto}.fg{margin-bottom:2.2rem;opacity:0;transform:translateY(24px)}
+.fl{display:block;font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
+.fi,.fs,.ft{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(201,169,110,.4);padding:.75rem 0;font-family:'Cormorant Garamond','Noto Serif SC',serif;font-size:1.1rem;color:var(--text);outline:none;transition:border-color .3s}
+.fi:focus,.fs:focus{border-bottom-color:var(--rose)}
+.ft{border:1px solid rgba(201,169,110,.3);border-radius:10px;padding:.8rem 1rem;background:rgba(255,255,255,.45);resize:none;height:100px}
+.ft:focus{border-color:var(--rose);outline:none}
+.fs{appearance:none;background-repeat:no-repeat;background-position:right .5rem center;cursor:pointer}
+.rg{display:flex;gap:1.8rem;flex-wrap:wrap}
+.rl{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:1rem;color:var(--text)}
+.rl input[type=radio]{accent-color:var(--rose);width:16px;height:16px}
+.sbtn{width:100%;padding:1rem 2rem;background:linear-gradient(135deg,var(--rose),var(--deep));color:#fff;border:none;border-radius:50px;font-family:'Cormorant Garamond',serif;font-size:1.1rem;letter-spacing:.22em;cursor:pointer;transition:all .3s;box-shadow:0 8px 26px rgba(180,96,122,.3)}
+.sbtn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(180,96,122,.42)}.sbtn:active{transform:translateY(0)}
+#rsvp-ok{display:none;text-align:center;padding:3rem 1rem}
+#rsvp-ok.show{display:block;animation:successPop .6s ease forwards}
+.ok-heart{font-size:4rem;display:block;margin-bottom:1rem;animation:heartBeat 1.4s ease infinite}
+#mbtn{position:fixed;bottom:2rem;right:2rem;z-index:1000;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--deep));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 22px rgba(180,96,122,.4);transition:all .3s;color:#fff;font-size:1.3rem}
+#mbtn:hover{transform:scale(1.12)}#mbtn.playing{animation:musicPulse 1.6s ease-in-out infinite}
+.fp{position:fixed;pointer-events:none;z-index:1;animation:floatUp linear forwards;opacity:0;user-select:none}
+footer{padding:5rem 2rem 3rem;text-align:center;background:linear-gradient(180deg,var(--cream) 0%,#fce4ec 100%);position:relative;overflow:hidden}
+</style>
+</head>
+<body>
+
+<!-- 01 LANDING OVERLAY -->
+<div id="overlay">
+  <canvas id="burst" style="position:absolute;inset:0;pointer-events:none;z-index:5;width:100%;height:100%"></canvas>
+  <div class="cat-float" style="top:8%;left:6%;font-size:5rem;animation-delay:0s">&#128049;</div>
+  <div class="cat-float" style="top:15%;right:8%;font-size:3.5rem;animation-delay:1.5s">&#128062;</div>
+  <div class="cat-float" style="bottom:20%;left:10%;font-size:4rem;animation-delay:3s">&#128049;</div>
+  <div class="cat-float" style="bottom:12%;right:6%;font-size:3rem;animation-delay:2s">&#128062;</div>
+  <div class="cat-float" style="top:40%;left:3%;font-size:2.5rem;animation-delay:4s">&#127800;</div>
+  <div class="cat-float" style="top:35%;right:4%;font-size:2.5rem;animation-delay:2.5s">&#127800;</div>
+  <div class="cat-float" style="top:60%;left:15%;font-size:2rem;animation-delay:1s">&#128149;</div>
+  <div class="cat-float" style="top:25%;right:18%;font-size:2rem;animation-delay:3.5s">&#128149;</div>
+  <p class="ov-sub" data-en="A Wedding Invitation" data-zh="&#23130;&#31036;&#36153;&#35831;&#20989;">A Wedding Invitation</p>
+  <h1 class="ov-title" data-en="Alex &amp; Mei Ling" data-zh="&#20122;&#21382;&#20811;&#26031; &amp; &#32654;&#29356;">Alex &amp; Mei Ling</h1>
+  <button id="paw-btn" aria-label="Enter">
+    <svg class="paw-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="63" rx="22" ry="20" fill="#D4829A" opacity=".9"/>
+      <ellipse cx="50" cy="63" rx="15" ry="13" fill="#F4C2C2"/>
+      <ellipse cx="27" cy="44" rx="9" ry="11" fill="#D4829A" opacity=".85"/>
+      <ellipse cx="73" cy="44" rx="9" ry="11" fill="#D4829A" opacity=".85"/>
+      <ellipse cx="38" cy="33" rx="8" ry="10" fill="#D4829A" opacity=".85"/>
+      <ellipse cx="62" cy="33" rx="8" ry="10" fill="#D4829A" opacity=".85"/>
+      <ellipse cx="27" cy="44" rx="5.5" ry="7" fill="#F4C2C2"/>
+      <ellipse cx="73" cy="44" rx="5.5" ry="7" fill="#F4C2C2"/>
+      <ellipse cx="38" cy="33" rx="5" ry="6.5" fill="#F4C2C2"/>
+      <ellipse cx="62" cy="33" rx="5" ry="6.5" fill="#F4C2C2"/>
+    </svg>
+    <span class="ov-hint"
+      data-en="&#10022; Tap the Paw to Begin Our Story &#10022;"
+      data-zh="&#10022; &#36731;&#35793;&#29483;&#29228;&#65292;&#24320;&#22987;&#25105;&#20204;&#30340;&#25925;&#20107; &#10022;">&#10022; Tap the Paw to Begin Our Story &#10022;</span>
+  </button>
+  <span class="pg" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%)">01</span>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">A &amp; ML</a>
+  <ul class="nav-links">
+    <li><a href="#hero"     data-en="Our Day"  data-zh="&#25105;&#20204;&#30340;&#26085;&#23376;">Our Day</a></li>
+    <li><a href="#story"    data-en="Story"    data-zh="&#25925;&#20107;">Story</a></li>
+    <li><a href="#gallery"  data-en="Memories" data-zh="&#22238;&#24456;">Memories</a></li>
+    <li><a href="#schedule" data-en="Schedule" data-zh="&#26085;&#31243;">Schedule</a></li>
+    <li><a href="#venue"    data-en="Venue"    data-zh="&#22330;&#22320;">Venue</a></li>
+    <li><a href="#rsvp"     data-en="RSVP"     data-zh="&#22238;&#22797;">RSVP</a></li>
+  </ul>
+  <div class="lang-sw">
+    <button class="lbtn on" id="btn-en" onclick="setLang('en')">EN</button>
+    <button class="lbtn" id="btn-zh" onclick="setLang('zh')">&#20013;&#25991;</button>
+  </div>
+</nav>
+
+<!-- 02 HERO -->
+<section id="hero">
+  <div id="hero-petals" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
+  <span class="pg reveal">02</span>
+  <p class="reveal" style="font-size:.8rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem"
+     data-en="Together Forever" data-zh="&#27704;&#32467;&#21516;&#24515;">Together Forever</p>
+  <div class="h-names reveal">
+    <span data-en="Alex" data-zh="&#20122;&#21382;&#20811;&#26031;">Alex</span>
+    <span class="h-amp">&amp;</span>
+    <span data-en="Mei Ling" data-zh="&#32654;&#29356;">Mei Ling</span>
+  </div>
+  <div class="divider reveal"><span style="font-size:1.2rem">&#128062;</span></div>
+  <p class="h-date shimmer reveal"
+     data-en="Saturday &middot; 8 August 2025"
+     data-zh="2025&#24180;8&#26376;8&#26085; &middot; &#26143;&#26399;&#20845;">Saturday &middot; 8 August 2025</p>
+  <p class="h-tag reveal"
+     data-en="Two souls, one purr-fect love story."
+     data-zh="&#20004;&#39184;&#24515;&#65292;&#19968;&#27573;&#23436;&#32654;&#30340;&#29233;&#24773;&#25925;&#20107;&#12290;">Two souls, one purr-fect love story.</p>
+  <div class="reveal" style="margin-top:3rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
+    <a href="#rsvp"  class="hero-cta-p" data-en="RSVP Now"  data-zh="&#31435;&#21363;&#22238;&#22797;">RSVP Now</a>
+    <a href="#story" class="hero-cta-s" data-en="Our Story" data-zh="&#25105;&#20204;&#30340;&#25925;&#20107;">Our Story</a>
+  </div>
+  <div style="position:absolute;bottom:-2rem;right:5%;font-size:8rem;opacity:.04;pointer-events:none;transform:scaleX(-1)">&#128049;</div>
+  <div style="position:absolute;top:15%;left:3%;font-size:5rem;opacity:.04;pointer-events:none">&#128062;</div>
+</section>
+
+<!-- 03 LOVE STORY -->
+<section id="story">
+  <div style="max-width:900px;margin:0 auto;padding:0 1rem">
+    <div class="sh">
+      <span class="pg">03</span>
+      <h2 data-en="Our Love Story" data-zh="&#25105;&#20204;&#30340;&#29233;&#24773;&#25925;&#20107;">Our Love Story</h2>
+      <div class="divider"><span style="font-size:1rem">&#128049;</span></div>
+      <p class="sub" data-en="A tale written in paw prints and heartbeats"
+         data-zh="&#29992;&#29483;&#29228;&#21360;&#21644;&#24515;&#36339;&#20070;&#20889;&#30340;&#25925;&#20107;">A tale written in paw prints and heartbeats</p>
+    </div>
+    <div class="tl">
+      <div class="tl-row reveal">
+        <div class="tl-l">
+          <p class="tl-yr">2019</p>
+          <p class="tl-ttl" data-en="First Encounter" data-zh="&#21021;&#27425;&#30456;&#36935;">First Encounter</p>
+          <p class="tl-desc" data-en="We met at a cozy cat cafe in the city. A curious tabby brought us together, and the rest is history." data-zh="&#25105;&#20204;&#22312;&#22478;&#24066;&#19968;&#23478;&#29482;&#36827;&#30340;&#29483;&#21483;&#20043;&#23478;&#30456;&#36935;&#12290;&#19968;&#21042;&#22909;&#22855;&#30340;&#29483;&#23433;&#25509;&#36827;&#20102;&#25105;&#20204;&#65292;&#20174;&#27492;&#20043;&#21518;&#30340;&#25925;&#20107;&#20320;&#20063;&#30693;&#36947;&#20102;&#12290;">We met at a cozy cat cafe in the city. A curious tabby brought us together, and the rest is history.</p>
+        </div>
+        <div class="tl-dot">&#128049;</div>
+        <div class="tl-r">
+          <p class="tl-yr">2019</p>
+          <p class="tl-ttl" data-en="First Encounter" data-zh="&#21021;&#27425;&#30456;&#36935;">First Encounter</p>
+          <p class="tl-desc" data-en="We met at a cozy cat cafe in the city. A curious tabby brought us together, and the rest is history." data-zh="&#25105;&#20204;&#22312;&#22478;&#24066;&#19968;&#23478;&#29482;&#36827;&#30340;&#29483;&#21483;&#20043;&#23478;&#30456;&#36935;&#12290;&#19968;&#21042;&#22909;&#22855;&#30340;&#29483;&#23433;&#25509;&#36827;&#20102;&#25105;&#20204;&#65292;&#20174;&#27492;&#20043;&#21518;&#30340;&#25925;&#20107;&#20320;&#20063;&#30693;&#36947;&#20102;&#12290;">We met at a cozy cat cafe in the city. A curious tabby brought us together, and the rest is history.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-l">
+          <p class="tl-yr">2020</p>
+          <p class="tl-ttl" data-en="First Date" data-zh="&#31532;&#19968;&#27425;&#32422;&#20250;">First Date</p>
+          <p class="tl-desc" data-en="A moonlit walk along the river, whispered promises, and a stray cat that followed us home." data-zh="&#26376;&#20809;&#19979;&#27493;&#36807;&#27827;&#36793;&#65292;&#36830;&#32493;&#30340;&#35828;&#35828;&#31454;&#35805;&#65292;&#36824;&#26377;&#19968;&#21042;&#36319;&#30528;&#25105;&#20204;&#22238;&#23478;&#30340;&#27969;&#27584;&#29483;&#12290;">A moonlit walk along the river, whispered promises, and a stray cat that followed us home.</p>
+        </div>
+        <div class="tl-dot">&#10084;</div>
+        <div class="tl-r">
+          <p class="tl-yr">2020</p>
+          <p class="tl-ttl" data-en="First Date" data-zh="&#31532;&#19968;&#27425;&#32422;&#20250;">First Date</p>
+          <p class="tl-desc" data-en="A moonlit walk along the river, whispered promises, and a stray cat that followed us home." data-zh="&#26376;&#20809;&#19979;&#27493;&#36807;&#27827;&#36793;&#65292;&#36830;&#32493;&#30340;&#35828;&#35828;&#31454;&#35805;&#65292;&#36824;&#26377;&#19968;&#21042;&#36319;&#30528;&#25105;&#20204;&#22238;&#23478;&#30340;&#27969;&#27584;&#29483;&#12290;">A moonlit walk along the river, whispered promises, and a stray cat that followed us home.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-l">
+          <p class="tl-yr">2022</p>
+          <p class="tl-ttl" data-en="Adopted Luna Together" data-zh="&#19968;&#36215;&#25910;&#20241;&#20102;&#26376;&#20142;">Adopted Luna Together</p>
+          <p class="tl-desc" data-en="We adopted our beloved cat Luna, who became the furry witness to every chapter of our love story." data-zh="&#25105;&#20204;&#25910;&#20241;&#20102;&#29483;&#21483;&#26376;&#20142;&#65292;&#23427;&#25104;&#20026;&#25105;&#20204;&#29233;&#24773;&#25925;&#20107;&#27599;&#19968;&#31456;&#30340;&#27611;&#32508;&#35777;&#20154;&#12290;">We adopted our beloved cat Luna, who became the furry witness to every chapter of our love story.</p>
+        </div>
+        <div class="tl-dot">&#128062;</div>
+        <div class="tl-r">
+          <p class="tl-yr">2022</p>
+          <p class="tl-ttl" data-en="Adopted Luna Together" data-zh="&#19968;&#36215;&#25910;&#20241;&#20102;&#26376;&#20142;">Adopted Luna Together</p>
+          <p class="tl-desc" data-en="We adopted our beloved cat Luna, who became the furry witness to every chapter of our love story." data-zh="&#25105;&#20204;&#25910;&#20241;&#20102;&#29483;&#21483;&#26376;&#20142;&#65292;&#23427;&#25104;&#20026;&#25105;&#20204;&#29233;&#24773;&#25925;&#20107;&#27599;&#19968;&#31456;&#30340;&#27611;&#32508;&#35777;&#20154;&#12290;">We adopted our beloved cat Luna, who became the furry witness to every chapter of our love story.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-l">
+          <p class="tl-yr">2024</p>
+          <p class="tl-ttl" data-en="The Proposal" data-zh="&#27714;&#23130;">The Proposal</p>
+          <p class="tl-desc" data-en="Under a sky full of stars, with Luna curled in her lap, Alex got down on one knee and asked the question that changed everything." data-zh="&#22312;&#28145;&#22812;&#30340;&#28010;&#22812;&#20043;&#19979;&#65292;&#26376;&#20142;&#34665;&#22312;&#32654;&#29356;&#30340;&#33785;&#19978;&#65292;&#20122;&#21382;&#20811;&#26031;&#21327;&#19979;&#21333;&#33829;&#65292;&#35828;&#20986;&#20102;&#37027;&#21477;&#25913;&#21464;&#19968;&#20999;&#30340;&#35805;&#12290;">Under a sky full of stars, with Luna curled in her lap, Alex got down on one knee and asked the question that changed everything.</p>
+        </div>
+        <div class="tl-dot">&#128141;</div>
+        <div class="tl-r">
+          <p class="tl-yr">2024</p>
+          <p class="tl-ttl" data-en="The Proposal" data-zh="&#27714;&#23130;">The Proposal</p>
+          <p class="tl-desc" data-en="Under a sky full of stars, with Luna curled in her lap, Alex got down on one knee and asked the question that changed everything." data-zh="&#22312;&#28145;&#22812;&#30340;&#28010;&#22812;&#20043;&#19979;&#65292;&#26376;&#20142;&#34665;&#22312;&#32654;&#29356;&#30340;&#33785;&#19978;&#65292;&#20122;&#21382;&#20811;&#26031;&#21327;&#19979;&#21333;&#33829;&#65292;&#35828;&#20986;&#20102;&#37027;&#21477;&#25913;&#21464;&#19968;&#20999;&#30340;&#35805;&#12290;">Under a sky full of stars, with Luna curled in her lap, Alex got down on one knee and asked the question that changed everything.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-l">
+          <p class="tl-yr">2025</p>
+          <p class="tl-ttl" data-en="Our Wedding Day" data-zh="&#25105;&#20204;&#30340;&#23130;&#31036;&#26085;">Our Wedding Day</p>
+          <p class="tl-desc" data-en="Today we write the most beautiful chapter yet. Two hearts, one home, and Luna to keep us company forever." data-zh="&#20170;&#22825;&#65292;&#25105;&#20204;&#20070;&#20889;&#26368;&#32654;&#22909;&#30340;&#31456;&#33410;&#12290;&#20004;&#39184;&#24515;&#65292;&#19968;&#20010;&#23478;&#65292;&#36824;&#26377;&#26376;&#20142;&#38450;&#20184;&#25105;&#20204;&#30340;&#27704;&#36828;&#12290;">Today we write the most beautiful chapter yet. Two hearts, one home, and Luna to keep us company forever.</p>
+        </div>
+        <div class="tl-dot">&#128142;</div>
+        <div class="tl-r">
+          <p class="tl-yr">2025</p>
+          <p class="tl-ttl" data-en="Our Wedding Day" data-zh="&#25105;&#20204;&#30340;&#23130;&#31036;&#26085;">Our Wedding Day</p>
+          <p class="tl-desc" data-en="Today we write the most beautiful chapter yet. Two hearts, one home, and Luna to keep us company forever." data-zh="&#20170;&#22825;&#65292;&#25105;&#20204;&#20070;&#20889;&#26368;&#32654;&#22909;&#30340;&#31456;&#33410;&#12290;&#20004;&#39184;&#24515;&#65292;&#19968;&#20010;&#23478;&#65292;&#36824;&#26377;&#26376;&#20142;&#38450;&#20184;&#25105;&#20204;&#30340;&#27704;&#36828;&#12290;">Today we write the most beautiful chapter yet. Two hearts, one home, and Luna to keep us company forever.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 GALLERY -->
+<section id="gallery">
+  <div class="sh">
+    <span class="pg">04</span>
+    <h2 data-en="Pre-Wedding Memories" data-zh="婚前留影">Pre-Wedding Memories</h2>
+    <div class="divider"><span style="font-size:1rem">🌸</span></div>
+    <p class="sub" data-en="Moments captured in golden light" data-zh="在金光中定格的瞬间">Moments captured in golden light</p>
+  </div>
+  <div class="gg">
+    <div class="gi reveal-s" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="Pre-wedding 1" loading="lazy"/>
+      <div class="go"><span class="gc" data-en="Golden Hour" data-zh="黄昏光线">Golden Hour</span></div>
+    </div>
+    <div class="gi reveal-s" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&q=80" alt="Pre-wedding 2" loading="lazy"/>
+      <div class="go"><span class="gc" data-en="Garden Bloom" data-zh="花园盛放">Garden Bloom</span></div>
+    </div>
+    <div class="gi reveal-s" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80" alt="Pre-wedding 3" loading="lazy"/>
+      <div class="go"><span class="gc" data-en="Tender Moments" data-zh="温柔的瞬间">Tender Moments</span></div>
+    </div>
+    <div class="gi reveal-s" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80" alt="Pre-wedding 4" loading="lazy"/>
+      <div class="go"><span class="gc" data-en="Eternal Love" data-zh="永恒的爱">Eternal Love</span></div>
+    </div>
+    <div class="gi reveal-s" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80" alt="Pre-wedding 5" loading="lazy"/>
+      <div class="go"><span class="gc" data-en="Together Always" data-zh="永远在一起">Together Always</span></div>
+    </div>
+    <div class="gi reveal-s" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80" alt="Pre-wedding 6" loading="lazy"/>
+      <div class="go"><span class="gc" data-en="Our Journey" data-zh="我们的旅程">Our Journey</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <span id="lb-close" onclick="closeLightbox(event)">&#10005;</span>
+  <img id="lb-img" src="" alt=""/>
+</div>
+
+<!-- 05 SCHEDULE -->
+<section id="schedule">
+  <div class="sh">
+    <span class="pg">05</span>
+    <h2 data-en="Wedding Day Schedule" data-zh="婚礼当日日程">Wedding Day Schedule</h2>
+    <div class="divider"><span style="font-size:1rem">&#128062;</span></div>
+    <p class="sub" data-en="Every moment, perfectly planned" data-zh="每一个瞬间，完美安排">Every moment, perfectly planned</p>
+  </div>
+  <div class="sf">
+    <div class="si">
+      <span class="st">10:00 AM</span>
+      <span class="sic">&#128149;</span>
+      <div>
+        <p class="sttl" data-en="Bridal Preparation" data-zh="新娘准备">Bridal Preparation</p>
+        <p class="sdesc" data-en="The bride and her entourage begin the morning ritual of beauty and joy." data-zh="新娘与伴娘们开始早晨的美丽仪式。">The bride and her entourage begin the morning ritual of beauty and joy.</p>
+      </div>
+    </div>
+    <div class="si">
+      <span class="st">12:00 PM</span>
+      <span class="sic">&#128062;</span>
+      <div>
+        <p class="sttl" data-en="Guest Arrival &amp; Welcome" data-zh="宾客抵达与迎接">Guest Arrival &amp; Welcome</p>
+        <p class="sdesc" data-en="Guests are welcomed with champagne, soft music, and rose petals." data-zh="宾客将以香槟、轻柔音乐和玫瑰花瓣迎接。">Guests are welcomed with champagne, soft music, and rose petals.</p>
+      </div>
+    </div>
+    <div class="si">
+      <span class="st">2:00 PM</span>
+      <span class="sic">&#128140;</span>
+      <div>
+        <p class="sttl" data-en="Wedding Ceremony" data-zh="婚礼仪式">Wedding Ceremony</p>
+        <p class="sdesc" data-en="The sacred exchange of vows beneath an arch of white roses and soft candlelight." data-zh="在白玫瑰拱门与烛光下，神圣地交换誓言。">The sacred exchange of vows beneath an arch of white roses and soft candlelight.</p>
+      </div>
+    </div>
+    <div class="si">
+      <span class="st">3:30 PM</span>
+      <span class="sic">&#127800;</span>
+      <div>
+        <p class="sttl" data-en="Photo Session" data-zh="拍照留念">Photo Session</p>
+        <p class="sdesc" data-en="Capture the magic with family and friends in the garden." data-zh="在花园中与家人和朋友一起留下美好瞬间。">Capture the magic with family and friends in the garden.</p>
+      </div>
+    </div>
+    <div class="si">
+      <span class="st">6:00 PM</span>
+      <span class="sic">&#127870;</span>
+      <div>
+        <p class="sttl" data-en="Wedding Banquet" data-zh="婚宴">Wedding Banquet</p>
+        <p class="sdesc" data-en="A lavish dinner celebration with toasts, laughter, and dancing into the night." data-zh="丰盛的晚宴，伴随祝酒、欢笑和夜间舞蹈。">A lavish dinner celebration with toasts, laughter, and dancing into the night.</p>
+      </div>
+    </div>
+    <div class="si">
+      <span class="st">9:00 PM</span>
+      <span class="sic">&#127881;</span>
+      <div>
+        <p class="sttl" data-en="Cake Cutting &amp; First Dance" data-zh="切蛋糕与第一支舞">Cake Cutting &amp; First Dance</p>
+        <p class="sdesc" data-en="The sweetest moment — cutting the cake and swaying together under the stars." data-zh="最甜蜜的时刻——切蛋糕，在星空下相拥起舞。">The sweetest moment — cutting the cake and swaying together under the stars.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 VENUE -->
+<section id="venue">
+  <div class="sh">
+    <span class="pg">06</span>
+    <h2 data-en="Venue &amp; Location" data-zh="婚礼场地">Venue &amp; Location</h2>
+    <div class="divider"><span style="font-size:1rem">&#128062;</span></div>
+    <p class="sub" data-en="Where our forever begins" data-zh="我们永恒的起点">Where our forever begins</p>
+  </div>
+  <div class="vd reveal">
+    <p class="vn">The Ritz-Carlton</p>
+    <p class="va" data-en="168 Jalan Imbi, Kuala Lumpur City Centre<br/>50450 Kuala Lumpur, Malaysia" data-zh="马来西亚吉隆坡市中心<br/>英比路168号，邮编50450">168 Jalan Imbi, Kuala Lumpur City Centre<br/>50450 Kuala Lumpur, Malaysia</p>
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="https://maps.google.com/?q=The+Ritz-Carlton+Kuala+Lumpur" target="_blank"
+         style="padding:.6rem 1.6rem;border:1px solid var(--gold);color:var(--gold);border-radius:50px;text-decoration:none;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;transition:all .3s"
+         onmouseover="this.style.background='var(--gold)';this.style.color='#fff'"
+         onmouseout="this.style.background='transparent';this.style.color='var(--gold)'"
+         data-en="Get Directions" data-zh="获取路线">Get Directions</a>
+    </div>
+  </div>
+  <div class="mw reveal-s">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.8!2d101.7138!3d3.1478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc362b0e0e0e0f%3A0x0!2sThe+Ritz-Carlton+Kuala+Lumpur!5e0!3m2!1sen!2smy!4v1"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="The Ritz-Carlton Kuala Lumpur"></iframe>
+  </div>
+</section>
+
+<!-- 07 RSVP -->
+<section id="rsvp">
+  <div class="sh">
+    <span class="pg">07</span>
+    <h2 data-en="RSVP" data-zh="敬请回复">RSVP</h2>
+    <div class="divider"><span style="font-size:1rem">&#128149;</span></div>
+    <p class="sub" data-en="Please reply by 1 July 2025" data-zh="请于2025年7月1日前回复">Please reply by 1 July 2025</p>
+  </div>
+  <div class="rf">
+    <div id="rsvp-form-wrap">
+      <div class="fg reveal">
+        <label class="fl" data-en="Your Full Name" data-zh="您的全名">Your Full Name</label>
+        <input class="fi" type="text" id="f-name" placeholder="Alex Chen" autocomplete="name"/>
+      </div>
+      <div class="fg reveal">
+        <label class="fl" data-en="Email Address" data-zh="电子邮件">Email Address</label>
+        <input class="fi" type="email" id="f-email" placeholder="you@example.com" autocomplete="email"/>
+      </div>
+      <div class="fg reveal">
+        <label class="fl" data-en="Will you attend?" data-zh="您是否出席？">Will you attend?</label>
+        <div class="rg">
+          <label class="rl"><input type="radio" name="attend" value="yes"/> <span data-en="Joyfully Accept" data-zh="欣然接受">Joyfully Accept</span></label>
+          <label class="rl"><input type="radio" name="attend" value="no"/>  <span data-en="Regretfully Decline" data-zh="遗憾婉拒">Regretfully Decline</span></label>
+          <label class="rl"><input type="radio" name="attend" value="maybe"/><span data-en="Maybe" data-zh="也许">Maybe</span></label>
+        </div>
+      </div>
+      <div class="fg reveal">
+        <label class="fl" data-en="Number of Guests" data-zh="出席人数">Number of Guests</label>
+        <select class="fs" id="f-guests">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5+">5+</option>
+        </select>
+      </div>
+      <div class="fg reveal">
+        <label class="fl" data-en="Dietary Restrictions" data-zh="饮食限制">Dietary Restrictions</label>
+        <input class="fi" type="text" id="f-diet" data-en-placeholder="e.g. Vegetarian, Halal, Nut allergy" data-zh-placeholder="例如：素食、清真、坚果过敏" placeholder="e.g. Vegetarian, Halal, Nut allergy"/>
+      </div>
+      <div class="fg reveal">
+        <label class="fl" data-en="A Message for the Couple" data-zh="给新人的祝福">A Message for the Couple</label>
+        <textarea class="ft" id="f-msg" data-en-placeholder="Share your wishes and blessings..." data-zh-placeholder="分享您的祝福与心意..." placeholder="Share your wishes and blessings..."></textarea>
+      </div>
+      <div class="fg reveal">
+        <button class="sbtn" onclick="submitRSVP()" data-en="Send with Love &#128149;" data-zh="带着爱意发送 &#128149;">Send with Love &#128149;</button>
+      </div>
+    </div>
+    <div id="rsvp-ok">
+      <span class="ok-heart">&#128149;</span>
+      <h3 style="font-family:'Great Vibes',cursive;font-size:2.5rem;color:var(--deep);margin-bottom:1rem" data-en="Thank You!" data-zh="谢谢您！">Thank You!</h3>
+      <p style="font-size:1.1rem;color:#7a5a68;line-height:1.8" data-en="Your RSVP has been received. We can't wait to celebrate with you!" data-zh="您的回复已收到。我们迫不及待地想与您共同庆祝！">Your RSVP has been received. We can't wait to celebrate with you!</p>
+      <p style="margin-top:1rem;font-size:2rem">&#128049; &#128062; &#128149;</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-size:3rem;margin-bottom:1rem;opacity:.5">&#128049;</div>
+  <p style="font-family:'Great Vibes',cursive;font-size:2.5rem;color:var(--deep);margin-bottom:.5rem">Alex &amp; Mei Ling</p>
+  <p style="font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem" data-en="8 August 2025" data-zh="2025年8月8日">8 August 2025</p>
+  <div style="display:flex;justify-content:center;gap:1rem;font-size:1.5rem;margin-bottom:2rem;opacity:.4">
+    &#128062; &#128149; &#128049; &#128149; &#128062;
+  </div>
+  <p style="font-size:.75rem;color:#a08090;letter-spacing:.1em" data-en="Made with love &amp; a little cat magic &#128049;" data-zh="用爱与一点猫咪魔法制作 &#128049;">Made with love &amp; a little cat magic &#128049;</p>
+</footer>
+
+<!-- Music Button -->
+<button id="mbtn" onclick="toggleMusic()" title="Toggle Music" aria-label="Toggle background music">&#9835;</button>
+<audio id="bg-music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"/>
+</audio>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════ -->
+<script>
+// ── Language System ──────────────────────────────────────────────────────────
+let currentLang = localStorage.getItem('wlang') || 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('wlang', lang);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (val !== null) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        const ph = el.getAttribute('data-' + lang + '-placeholder');
+        if (ph) el.placeholder = ph;
+      } else {
+        el.innerHTML = val;
+      }
+    }
+  });
+  document.getElementById('btn-en').classList.toggle('on', lang === 'en');
+  document.getElementById('btn-zh').classList.toggle('on', lang === 'zh');
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+}
+
+// Apply saved language on load
+if (currentLang === 'zh') setLang('zh');
+
+// ── Paw Button — Entrance ────────────────────────────────────────────────────
+document.getElementById('paw-btn').addEventListener('click', function(e) {
+  // Ripple effect
+  const btn = this;
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  const size = Math.max(btn.offsetWidth, btn.offsetHeight) * 2;
+  ripple.style.cssText = 'width:' + size + 'px;height:' + size + 'px;top:50%;left:50%;margin-top:-' + (size/2) + 'px;margin-left:-' + (size/2) + 'px;';
+  btn.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 900);
+
+  // Particle burst on canvas
+  burstParticles();
+
+  // Hide overlay after short delay
+  setTimeout(() => {
+    document.getElementById('overlay').classList.add('gone');
+    startFloatingParticles();
+    spawnHeroPetals();
+    // Try autoplay music
+    const audio = document.getElementById('bg-music');
+    audio.volume = 0.3;
+    audio.play().then(() => {
+      const btn = document.getElementById('mbtn');
+      btn.classList.add('playing');
+      btn.innerHTML = '&#9646;&#9646;';
+    }).catch(() => {});
+  }, 600);
+});
+
+// ── Canvas Burst ─────────────────────────────────────────────────────────────
+function burstParticles() {
+  const canvas = document.getElementById('burst');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const particles = [];
+  const emojis = ['🐾','💕','🌸','❤️','🐱','✨'];
+  for (let i = 0; i < 60; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 3 + Math.random() * 8;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      alpha: 1,
+      emoji: emojis[Math.floor(Math.random() * emojis.length)],
+      size: 16 + Math.random() * 20,
+      rot: Math.random() * Math.PI * 2,
+      rotV: (Math.random() - 0.5) * 0.2
+    });
+  }
+  let frame;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      p.vy += 0.15;
+      p.alpha -= 0.018;
+      p.rot += p.rotV;
+      if (p.alpha <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.font = p.size + 'px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.emoji, 0, 0);
+      ctx.restore();
+    });
+    if (particles.some(p => p.alpha > 0)) {
+      frame = requestAnimationFrame(animate);
+    } else {
+      cancelAnimationFrame(frame);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  animate();
+}
+
+// ── Floating Particles (hearts + paws) ───────────────────────────────────────
+function startFloatingParticles() {
+  const symbols = ['🐾','💕','🌸','❤️','✨','🐱'];
+  function spawn() {
+    const el = document.createElement('div');
+    el.className = 'fp';
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    const size = 14 + Math.random() * 18;
+    const dur  = 6 + Math.random() * 8;
+    el.style.cssText = [
+      'left:' + (Math.random() * 100) + 'vw',
+      'bottom:-60px',
+      'font-size:' + size + 'px',
+      'animation-duration:' + dur + 's',
+      'animation-delay:' + (Math.random() * 2) + 's'
+    ].join(';');
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 2) * 1000);
+  }
+  setInterval(spawn, 800);
+}
+
+// ── Hero Petals ───────────────────────────────────────────────────────────────
+function spawnHeroPetals() {
+  const container = document.getElementById('hero-petals');
+  const petals = ['🌸','🌺','🌼'];
+  function addPetal() {
+    const el = document.createElement('div');
+    el.style.cssText = [
+      'position:absolute',
+      'left:' + (Math.random() * 110 - 5) + '%',
+      'top:-40px',
+      'font-size:' + (12 + Math.random() * 16) + 'px',
+      'opacity:0',
+      'animation:petalFall ' + (5 + Math.random() * 6) + 's linear ' + (Math.random() * 4) + 's infinite',
+      'pointer-events:none'
+    ].join(';');
+    el.textContent = petals[Math.floor(Math.random() * petals.length)];
+    container.appendChild(el);
+  }
+  for (let i = 0; i < 12; i++) addPetal();
+}
+
+// ── Navigation scroll effect ─────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── GSAP ScrollTrigger Animations ────────────────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
+
+// Generic reveal
+gsap.utils.toArray('.reveal').forEach(el => {
+  gsap.to(el, {
+    opacity: 1, y: 0,
+    duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+gsap.utils.toArray('.reveal-l').forEach(el => {
+  gsap.to(el, {
+    opacity: 1, x: 0,
+    duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+gsap.utils.toArray('.reveal-r').forEach(el => {
+  gsap.to(el, {
+    opacity: 1, x: 0,
+    duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+gsap.utils.toArray('.reveal-s').forEach((el, i) => {
+  gsap.to(el, {
+    opacity: 1, scale: 1,
+    duration: 0.8, ease: 'back.out(1.4)',
+    delay: i * 0.08,
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+// Timeline rows stagger
+gsap.utils.toArray('.tl-row').forEach((el, i) => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 40 },
+    {
+      opacity: 1, y: 0,
+      duration: 0.8, ease: 'power3.out',
+      delay: i * 0.12,
+      scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' }
+    }
+  );
+});
+
+// Schedule items stagger
+gsap.utils.toArray('.si').forEach((el, i) => {
+  gsap.fromTo(el,
+    { opacity: 0, x: -30 },
+    {
+      opacity: 1, x: 0,
+      duration: 0.7, ease: 'power2.out',
+      delay: i * 0.1,
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+    }
+  );
+});
+
+// Venue parallax
+gsap.to('.mw', {
+  yPercent: -8,
+  ease: 'none',
+  scrollTrigger: { trigger: '#venue', start: 'top bottom', end: 'bottom top', scrub: true }
+});
+
+// RSVP form groups stagger
+gsap.utils.toArray('.fg').forEach((el, i) => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 24 },
+    {
+      opacity: 1, y: 0,
+      duration: 0.7, ease: 'power2.out',
+      delay: i * 0.1,
+      scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
+    }
+  );
+});
+
+// ── Lightbox ─────────────────────────────────────────────────────────────────
+function openLightbox(el) {
+  const src = el.querySelector('img').src;
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+  // Only close if clicking the backdrop or close button, not the image
+  if (e && e.target && e.target.id === 'lb-img') return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ── Music ─────────────────────────────────────────────────────────────────────
+function toggleMusic() {
+  const audio = document.getElementById('bg-music');
+  const btn   = document.getElementById('mbtn');
+  if (audio.paused) {
+    audio.volume = 0.3;
+    audio.play();
+    btn.classList.add('playing');
+    btn.innerHTML = '&#9646;&#9646;';
+  } else {
+    audio.pause();
+    btn.classList.remove('playing');
+    btn.innerHTML = '&#9835;';
+  }
+}
+
+// ── RSVP Submit ───────────────────────────────────────────────────────────────
+function submitRSVP() {
+  const name   = document.getElementById('f-name').value.trim();
+  const attend = document.querySelector('input[name="attend"]:checked');
+  if (!name) {
+    alert(currentLang === 'zh' ? '请输入您的姓名。' : 'Please enter your name.');
+    return;
+  }
+  if (!attend) {
+    alert(currentLang === 'zh' ? '请选择是否出席。' : 'Please select your attendance.');
+    return;
+  }
+  // Animate out form, animate in success
+  const formWrap = document.getElementById('rsvp-form-wrap');
+  const ok       = document.getElementById('rsvp-ok');
+  gsap.to(formWrap, {
+    opacity: 0, y: -20, duration: 0.5, ease: 'power2.in',
+    onComplete: () => {
+      formWrap.style.display = 'none';
+      ok.classList.add('show');
+      if (currentLang === 'zh') setLang('zh');
+      gsap.fromTo(ok, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.6)' });
+    }
+  });
+}
+</script>
+</body>
+</html>

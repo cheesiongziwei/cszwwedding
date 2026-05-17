@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Are Getting Married</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;600&family=Noto+Sans+SC:wght@100;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f1ec;
+            --bg-dark: #e8e4dc;
+            --text: #2a2a2a;
+            --text-light: #888;
+            --accent: #b59f83;
+            --error: #d9534f; /* 柔和的红色用于错误提示 */
+            --line: rgba(42, 42, 42, 0.1);
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans SC', sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 噪点纹理背景 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.4;
+        }
+
+        /* 装饰性细线 */
+        .line-v { height: 100vh; width: 1px; background: var(--line); position: fixed; top: 0; z-index: 0; }
+        .line-v.left { left: 8%; }
+        .line-v.right { right: 8%; }
+
+        /* 滚动指示器 */
+        #progress { position: fixed; top: 0; left: 0; height: 1px; background: var(--text); z-index: 10000; transition: width 0.1s; width: 0%; opacity: 0.6; }
+
+        /* ========== 开场 ========== */
+        #entrance {
+            position: fixed; inset: 0;
+            background: var(--bg);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; transition: opacity 0.8s ease, transform 0.8s var(--ease);
+        }
+        .enter-btn {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 1px solid var(--text); color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; cursor: pointer;
+            transition: transform 0.6s var(--ease);
+        }
+        .enter-btn:hover { transform: scale(1.1) rotate(10deg); background: var(--text); color: var(--bg); }
+        .enter-text { margin-top: 20px; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; opacity: 0.6; }
+
+        /* ========== 主内容 ========== */
+        #main { opacity: 0; transition: opacity 1s ease; display: none; padding-top: 10vh; }
+
+        /* Header 杂志排版 */
+        header { padding: 0 10%; position: relative; }
+        
+        .title-huge {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(4rem, 12vw, 10rem);
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            font-weight: 200;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .title-huge span {
+            font-size: 0.4em;
+            vertical-align: middle;
+            letter-spacing: 0.2em;
+            display: inline-block;
+            transform: translateY(-0.5em);
+            opacity: 0.6;
+        }
+
+        .sub-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-top: 40px; border-top: 1px solid var(--text); padding-top: 20px;
+        }
+        .sub-header p { font-size: 0.8rem; letter-spacing: 2px; opacity: 0.6; }
+
+        /* 邀请言 - 错落排版 */
+        .invite-section {
+            padding: 12vh 10% 8vh;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+            position: relative;
+        }
+        .invite-big-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1.4;
+            font-weight: 300;
+        }
+        .invite-small-text {
+            display: flex; flex-direction: column; justify-content: center;
+            font-size: 0.95rem; opacity: 0.75; gap: 15px;
+            padding-left: 40px; border-left: 1px solid var(--accent);
+        }
+
+        /* 猫咪容器 (幽灵猫) */
+        .ghost-cat {
+            position: fixed; width: 55px; height: 55px; border-radius: 50%;
+            overflow: hidden; opacity: 0; pointer-events: none;
+            mix-blend-mode: multiply; 
+            filter: grayscale(0.2);
+            transition: opacity 0.8s ease;
+            z-index: 5;
+        }
+        .ghost-cat img { width: 100%; height: 100%; object-fit: cover; }
+        .ghost-cat.active { opacity: 0.85; }
+
+        /* 照片展示区 */
+        .gallery-section { padding: 5vh 0; }
+        
+        .photo-block {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 0;
+            margin-bottom: 15vh;
+            position: relative;
+            opacity: 0; transform: translateY(50px); transition: all 1s var(--ease);
+        }
+        
+        .photo-block.visible { opacity: 1; transform: translateY(0); }
+        .photo-block.reverse { grid-template-columns: 0.8fr 1.2fr; }
+
+        .img-wrapper {
+            width: 100%; height: 85vh;
+            overflow: hidden; position: relative;
+            background: #e0ddd6; /* 占位色 */
+        }
+        
+        .img-wrapper img {
+            width: 100%; height: 120%;
+            object-fit: cover;
+            transform: translateY(-10%); transition: transform 1.5s var(--ease);
+        }
+        .photo-block.visible .img-wrapper img { transform: translateY(0); }
+
+        .text-area {
+            padding: 8vh 8% 0;
+            display: flex; flex-direction: column; justify-content: center;
+            position: relative;
+        }
+        
+        .bg-num {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 14rem; line-height: 1;
+            color: transparent; -webkit-text-stroke: 1px rgba(0,0,0,0.06);
+            position: absolute; top: -4rem; left: -2rem; z-index: -1;
+            pointer-events: none;
+        }
+
+        .text-area h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.2rem; font-weight: 300; margin-bottom: 20px; line-height: 1.3;
+        }
+        
+        .text-area p {
+            font-size: 0.9rem; line-height: 2; opacity: 0.65; max-width: 360px;
+        }
+
+        /* 纯文字装饰页 */
+        .divider-page {
+            height: 60vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; position: relative;
+        }
+        .quote-mark {
+            font-size: 4rem; font-family: serif; color: var(--accent); opacity: 0.3; margin-right: 20px;
+        }
+        .quote-text {
+            font-family: 'Noto Serif SC', serif; font-size: 1.8rem; font-weight: 300; letter-spacing: 2px;
+        }
+
+        /* 底部信息 */
+        .info-section {
+            padding: 10vh 10% 5vh;
+            text-align: center;
+        }
+        .info-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 50px;
+        }
+        .info-item h4 { font-weight: 100; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.5; margin-bottom: 10px; }
+        .info-item div { font-family: 'Noto Serif SC', serif; font-size: 1.5rem; }
+        
+        .line-bottom { width: 40px; height: 1px; background: var(--text); margin: 30px auto 0; opacity: 0.3; }
+
+        /* 📝 RSVP 样式 & 验证错误样式 */
+        .rsvp-section {
+            padding: 10vh 8%;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            min-height: 60vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .rsvp-content {
+            width: 100%; max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        .rsvp-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .rsvp-title .bg-text {
+            position: absolute;
+            top: -35px; left: 50%; transform: translateX(-50%);
+            font-size: 8rem;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(0,0,0,0.04);
+            z-index: 0;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .rsvp-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            line-height: 1.8;
+            position: relative; z-index: 1;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 35px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            font-family: 'Noto Sans SC', sans-serif;
+            color: var(--text);
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(0,0,0,0.15);
+            outline: none;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+        }
+
+        .input-group input:focus { border-bottom-color: var(--text); }
+
+        .input-group label {
+            position: absolute;
+            top: 12px; left: 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: -18px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        /* 验证错误状态样式 */
+        .input-group.invalid input {
+            border-bottom-color: var(--error);
+        }
+        
+        .error-msg {
+            font-size: 0.75rem;
+            color: var(--error);
+            margin-top: 8px;
+            height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+
+        .input-group.invalid .error-msg {
+            height: 20px; /* 展开高度 */
+            opacity: 1;
+        }
+
+        #btn-submit {
+            margin-top: 20px;
+            background: transparent;
+            border: 1px solid var(--text);
+            padding: 14px 40px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.4s var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #btn-submit:hover { background: var(--text); color: var(--bg); }
+        #btn-submit:disabled { opacity: 0.5; cursor: wait; }
+
+        .rsvp-success {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: var(--bg);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        .rsvp-success.active { opacity: 1; pointer-events: auto; }
+        .check-icon {
+            width: 60px; height: 60px; border: 1px solid var(--accent);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--accent); margin-bottom: 20px;
+            animation: popIn 0.5s var(--ease) forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        footer { text-align: center; padding: 40px; font-size: 0.7rem; letter-spacing: 2px; opacity: 0.4; }
+
+        @media (max-width: 768px) {
+            .title-huge { font-size: 15vw; }
+            .invite-section { grid-template-columns: 1fr; gap: 30px; }
+            .invite-big-text { font-size: 1.8rem; }
+            .photo-block { grid-template-columns: 1fr; }
+            .photo-block.reverse { grid-template-columns: 1fr; }
+            .img-wrapper { height: 60vh; }
+            .text-area { padding: 40px 6% 0; }
+            .bg-num { font-size: 8rem; top: -1rem; left: 0; }
+            .line-v { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <div class="line-v left"></div>
+    <div class="line-v right"></div>
+
+    <!-- 1. 开场 -->
+    <div id="entrance">
+        <div class="enter-btn" onclick="enterWedding()">🐾</div>
+        <p class="enter-text">Click to Enter</p>
+    </div>
+
+    <!-- 2. 主内容 -->
+    <div id="main">
+        <header>
+            <h1 class="title-huge">
+                <span>WEDDING</span> 小明 & 小美
+            </h1>
+            <div class="sub-header">
+                <p>EST. 2024</p>
+                <p>FOREVER & ALWAYS</p>
+            </div>
+        </header>
+
+        <!-- 🐱 幽灵猫咪 (左右各一只) -->
+        <div class="ghost-cat" id="cat-l"></div>
+        <div class="ghost-cat" id="cat-r"></div>
+
+        <!-- 邀请言 -->
+        <section class="invite-section">
+            <h2 class="invite-big-text">
+                从相识到相守，<br>
+                每一步都是命中注定。
+            </h2>
+            <div class="invite-small-text">
+                <p>在这充满爱意的日子里，诚挚邀请您见证我们人生中最珍贵的时刻。</p>
+                <p>您的到来，是我们收到最美好的祝福。请带着轻松的心情，来分享我们的喜悦。</p>
+            </div>
+        </section>
+
+        <!-- 照片 01 -->
+        <section class="gallery-section">
+            <div class="photo-block">
+                <div class="img-wrapper">
+                    <!-- 替换 src 为您的婚纱照 -->
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop" alt="Wedding 01">
+                </div>
+                <div class="text-area">
+                    <div class="bg-num">01</div>
+                    <h3>初见 · 怦然心动</h3>
+                    <p>入目无别人，四下皆是你。<br>从初见时的惊鸿一瞥，<br>到此刻的执手相看，<br>你就是我此生最美的遇见。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 纯文字装饰 -->
+        <section class="divider-page">
+            <p class="quote-text">
+                <span class="quote-mark">"</span>
+                时间是让人猝不及防的东西<br>
+                晴时有风阴时有雨<br>
+                争不过朝夕又念着往昔
+            </p>
+        </section>
+
+        <!-- 照片 02 -->
+        <section class="gallery-section">
+            <div class="photo-block reverse">
+                <div class="text-area" style="align-items: flex-end; text-align: right;">
+                    <div class="bg-num" style="right: -1rem; left: auto;">02</div>
+                    <h3>相知 · 岁月静好</h3>
+                    <p>幸得识卿桃花面，从此阡陌多暖意。<br>时间得意，春风嘉许，<br>我遇上你，就是人间值得。</p>
+                </div>
+                <div class="img-wrapper">
+                     <!-- 替换 src 为您的婚纱照 -->
+                    <img src="https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=1978&auto=format&fit=crop" alt="Wedding 02">
+                </div>
+            </div>
+        </section>
+        
+        <!-- 照片 03 -->
+        <section class="gallery-section">
+             <div class="photo-block">
+                <div class="img-wrapper">
+                     <!-- 替换 src 为您的婚纱照 -->
+                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" alt="Wedding 03">
+                </div>
+                <div class="text-area">
+                    <div class="bg-num">03</div>
+                    <h3>相守 · 执子之手</h3>
+                    <p>因为我不知道，下一辈子是否还能遇见你，<br>所以我今生才会那么努力，把最好的都给你。<br>万家灯火，终于有一盏为我们而亮。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部信息 -->
+        <section class="info-section">
+            <h2 style="font-family: 'Noto Serif SC'; font-size: 2.5rem; font-weight: 300;">婚礼详情</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h4>DATE</h4>
+                    <div>2026.10.18</div>
+                </div>
+                <div class="info-item">
+                    <h4>TIME</h4>
+                    <div>11:08 AM</div>
+                </div>
+                <div class="info-item">
+                    <h4>VENUE</h4>
+                    <div>XX 酒店</div>
+                </div>
+            </div>
+            <div class="line-bottom"></div>
+        </section>
+
+        <!-- RSVP 区域 (含自定义验证) -->
+        <section class="rsvp-section">
+            <div class="rsvp-content">
+                <h2 class="rsvp-title">
+                    <span class="bg-text">RSVP</span>
+                    期待您的到来
+                </h2>
+                <p class="rsvp-desc">
+                    请于 2026 年 9 月 30 日 前告知我们您的出席意向<br>
+                    以便我们为您安排最舒适的席位
+                </p>
+                
+                <!-- novalidate 禁用浏览器默认验证，交由 JS 处理 -->
+                <form id="rsvp-form" class="rsvp-form" onsubmit="submitRSVP(event)" novalidate>
+                    <div class="input-group">
+                        <input type="text" id="entry-name" placeholder=" " required autocomplete="off">
+                        <label>您的姓名 / Name</label>
+                        <div class="error-msg" id="error-name">Please enter your name / 请填写姓名</div>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="entry-count" placeholder=" " min="1" required autocomplete="off">
+                        <label>出席人数 / Guests</label>
+                        <div class="error-msg" id="error-count">Please enter guest count / 请填写人数</div>
+                    </div>
+                    <button type="submit" id="btn-submit">
+                        <span>Confirm Attendance</span>
+                    </button>
+                </form>
+                
+                <div id="rsvp-success" class="rsvp-success">
+                    <div class="check-icon">✓</div>
+                    <p>Thank You ❤️</p>
+                    <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">已收到您的祝福</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            © 2026 XIAOMING & XIAOMEI WEDDING
+        </footer>
+    </div>
+
+    <script>
+        // ==========================================
+        // ⚙️ Google Form 配置区 (请在此处修改)
+        // ==========================================
+        
+        // 1. 这里填你的 Google Form Action URL (以 /formResponse 结尾)
+        const GOOGLE_FORM_URL = 'YOUR_GOOGLE_FORM_ACTION_URL_HERE'; 
+        
+        // 2. 这里填姓名的 entry ID (例如: entry.123456789)
+        const ENTRY_NAME_ID = 'YOUR_NAME_ENTRY_ID'; 
+        
+        // 3. 这里填人数的 entry ID (例如: entry.987654321)
+        const ENTRY_COUNT_ID = 'YOUR_COUNT_ENTRY_ID'; 
+
+        // ==========================================
+
+        function enterWedding() {
+            const entrance = document.getElementById('entrance');
+            entrance.style.opacity = '0';
+            setTimeout(() => {
+                entrance.style.display = 'none';
+                const main = document.getElementById('main');
+                main.style.display = 'block';
+                setTimeout(() => main.style.opacity = '1', 50);
+                initCat();
+                initScroll();
+            }, 800);
+        }
+
+        // 进度条
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement;
+            const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+            document.getElementById('progress').style.width = p + '%';
+        }, {passive: true});
+
+        // 滚动视差与出现动画
+        function initScroll() {
+            const blocks = document.querySelectorAll('.photo-block');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if(e.isIntersecting) e.target.classList.add('visible');
+                });
+            }, { threshold: 0.15 });
+            blocks.forEach(b => observer.observe(b));
+        }
+
+        // 幽灵猫逻辑
+        function initCat() {
+            const l = document.getElementById('cat-l');
+            const r = document.getElementById('cat-r');
+            
+            // 这里的图片路径请替换为您本地的 cat.gif
+            const srcs = [
+                'asset/image/gif/cat1.gif', 'asset/image/gif/cat2.gif',
+                'asset/image/gif/cat3.gif', 'asset/image/gif/cat4.gif', 'asset/image/gif/cat5.gif'
+            ];
+            
+            let lastY = window.scrollY;
+            let timer = null;
+            let activeSide = null;
+
+            window.addEventListener('scroll', () => {
+                const curY = window.scrollY;
+                const dist = Math.abs(curY - lastY);
+                
+                if (dist > 40) {
+                    if (timer) clearTimeout(timer);
+                    
+                    const side = Math.random() < 0.5 ? 'l' : 'r';
+                    const active = side === 'l' ? l : r;
+                    const passive = side === 'l' ? r : l;
+                    
+                    passive.classList.remove('active');
+                    
+                    if (activeSide !== side) {
+                        active.classList.remove('active');
+                        active.style.top = (100 + Math.random() * (window.innerHeight - 200)) + 'px';
+                        active.style[side === 'l' ? 'left' : 'right'] = (3 + Math.random() * 5) + '%';
+                        
+                        // 随机选一张图，如果本地没有图，这里会用破图图标，不影响布局
+                        active.innerHTML = `<img src="${srcs[Math.floor(Math.random()*srcs.length)]}" onerror="this.src='https://placekitten.com/100/100'">`;
+                        
+                        requestAnimationFrame(() => active.classList.add('active'));
+                        activeSide = side;
+                    }
+                    
+                    lastY = curY;
+                }
+
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    l.classList.remove('active');
+                    r.classList.remove('active');
+                }, 1500);
+            }, {passive: true});
+        }
+
+        // RSVP 提交逻辑 (含自定义验证)
+        function submitRSVP(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('entry-name');
+            const countInput = document.getElementById('entry-count');
+            const btn = document.getElementById('btn-submit');
+            
+            let isValid = true;
+
+            // 1. 验证姓名
+            if (!nameInput.value.trim()) {
+                document.querySelector('#error-name').parentElement.classList.add('invalid');
+                isValid = false;
+            } else {
+                document.querySelector('#error-name').parentElement.classList.remove('invalid');
+            }
+
+            // 2. 验证人数
+            if (!countInput.value || countInput.value < 1) {
+                document.querySelector('#error-count').parentElement.classList.add('invalid');
+                isValid = false;
+            } else {
+                document.querySelector('#error-count').parentElement.classList.remove('invalid');
+            }
+
+            // 如果验证失败，停止提交
+            if (!isValid) return;
+
+            // --- 验证通过，开始提交逻辑 ---
+            btn.disabled = true;
+            btn.innerHTML = '<span>Sending...</span>';
+
+            // 检查是否配置了 ID
+            if (GOOGLE_FORM_URL.includes('YOUR_')) {
+                // --- 模拟模式 (未配置 ID 时) ---
+                console.log("模拟提交:", nameInput.value, countInput.value);
+                setTimeout(() => {
+                    showSuccess();
+                    // alert("演示模式：数据未发送。请在代码中配置 Google Form ID。");
+                }, 1000);
+            } else {
+                // --- 真实提交模式 ---
+                const formData = new FormData();
+                formData.append(ENTRY_NAME_ID, nameInput.value);
+                formData.append(ENTRY_COUNT_ID, countInput.value);
+
+                fetch(GOOGLE_FORM_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', 
+                    body: formData
+                }).then(() => {
+                    showSuccess();
+                }).catch(err => {
+                    console.error(err);
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>Retry</span>';
+                });
+            }
+        }
+
+        function showSuccess() {
+            const form = document.getElementById('rsvp-form');
+            const success = document.getElementById('rsvp-success');
+            form.style.opacity = '0';
+            setTimeout(() => {
+                form.style.display = 'none';
+                success.classList.add('active');
+            }, 300);
+        }
+
+        // 可选：当用户开始输入时，立即消除错误提示
+        document.querySelectorAll('.input-group input').forEach(input => {
+            input.addEventListener('input', function() {
+                this.parentElement.classList.remove('invalid');
+            });
+        });
+    </script>
+</body>
+</html>
