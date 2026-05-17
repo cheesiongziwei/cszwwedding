@@ -1,4 +1,4 @@
-<!-- Version: v2.3.0-FinalAdjust | Date: 2025-01-15 | 新人照片尺寸调整，移除enter-area上边距 -->
+<!-- Version: v2.3.0-DeepPetal | Date: 2025-01-15 | 花瓣颜色加深增强 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -38,6 +38,40 @@
             position: fixed; inset: 0; background: var(--bg);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 10000; transition: opacity 0.8s ease, transform 0.8s var(--ease);
+            overflow: hidden;
+        }
+
+        /* 🌸 飘落花瓣样式 - 颜色加深增强 */
+        #entrance .petal {
+            position: absolute;
+            top: -20px;
+            background: radial-gradient(circle at 30% 30%, #ffe8f5, #f570a8); /* 加深颜色：亮粉到深粉 */
+            border-radius: 50% 0 50% 0;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+            animation: petalFall linear infinite;
+            animation-duration: var(--duration, 8s);
+            animation-delay: var(--delay, 0s);
+            box-shadow: 0 3px 10px rgba(245, 112, 168, 0.5); /* 加深阴影 */
+            border: 0.5px solid rgba(245, 112, 168, 0.3); /* 添加边框增强可见度 */
+        }
+
+        @keyframes petalFall {
+            0% { 
+                transform: translateY(-5vh) rotate(0deg) translateX(0); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: var(--max-opacity, 0.8); /* 提高默认最大不透明度 */
+            }
+            90% { 
+                opacity: var(--max-opacity, 0.8); 
+            }
+            100% { 
+                transform: translateY(105vh) rotate(var(--rotate, 360deg)) translateX(var(--sway, 30px)); 
+                opacity: 0; 
+            }
         }
 
         /* 中国风边框容器 */
@@ -51,6 +85,7 @@
             align-items: center;
             min-height: 800px;
             justify-content: center;
+            z-index: 2;
         }
 
         /* 外框 */
@@ -117,7 +152,6 @@
             text-align: center;
         }
         .couple-illustration img {
-            /* 桌面版：290px */
             width: 290px;
             height: auto;
             display: block;
@@ -154,7 +188,6 @@
             opacity: 0; 
             transition: opacity 0.5s; 
             pointer-events: none;
-            /* margin-top 已移除 */
         }
         .enter-area.visible { opacity: 1; pointer-events: auto; }
         
@@ -452,7 +485,6 @@
                 height: 85px; 
             }
             .couple-illustration img { 
-                /* 手機版：250px */
                 width: 250px; 
             }
             .cat-name { font-size: 0.42rem; }
@@ -469,7 +501,7 @@
 <body>
     <div id="progress"></div>
 
-    <!-- ========== 开场页面 - 中国风 ========== -->
+    <!-- ========== 开场页面 - 中国风 + 花瓣 ========== -->
     <div id="entrance">
         <div class="entrance-content">
             <!-- 四角传统云纹装饰 -->
@@ -741,6 +773,36 @@
     </div>
 
     <script>
+        // 🌸 生成飘落花瓣特效 - 颜色加深增强
+        function createPetals() {
+            const entrance = document.getElementById('entrance');
+            const petalCount = 45; // 花瓣数量
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                // 随机属性
+                const size = Math.random() * 12 + 6; // 6-18px
+                const left = Math.random() * 100; // 水平位置 0-100%
+                const duration = Math.random() * 6 + 7; // 下落时间 7-13s
+                const delay = Math.random() * 10; // 延迟 0-10s
+                const rotate = (Math.random() * 720 - 360); // 旋转角度
+                const sway = (Math.random() * 80 - 40); // 左右飘动幅度
+                const opacity = Math.random() * 0.25 + 0.7; // 透明度 0.7-0.95（加深增强）
+
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${left}%`;
+                petal.style.setProperty('--duration', `${duration}s`);
+                petal.style.setProperty('--delay', `${delay}s`);
+                petal.style.setProperty('--rotate', `${rotate}deg`);
+                petal.style.setProperty('--sway', `${sway}px`);
+                petal.style.setProperty('--max-opacity', opacity);
+                
+                entrance.appendChild(petal);
+            }
+        }
+
         let currentLang = localStorage.getItem('wedding_lang') || 'zh';
 
         function setLanguage(lang) {
@@ -760,6 +822,9 @@
             document.getElementById('enter-area').classList.add('visible');
         }
         setLanguage(currentLang);
+        
+        // 初始化花瓣
+        createPetals();
 
         const catSounds = {
             'meow_t': 'asset/audio/cat/meow_t.mp3',
