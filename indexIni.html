@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emma & Henry's Wedding Invitation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-white: #FEFDF8;
+            --accent-green: #A8C4A2;
+            --accent-pink: #FADADD;
+            --light-gold: #F7E7CE;
+            --romantic-pink: #FFE5E5;
+        }
+        
+        .romantic-heart {
+            position: fixed;
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: fall linear forwards;
+            font-size: 20px;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-white);
+            overflow-x: hidden;
+        }
+        
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .floating-cat {
+            position: fixed;
+            z-index: 10;
+            animation: float 8s ease-in-out infinite;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        .floating-decoration {
+            position: fixed;
+            z-index: 1;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: float 12s ease-in-out infinite;
+        }
+        
+        @keyframes leaf-float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        .envelope-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #f0d9c5, #e0c6a8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #d4af8b;
+            position: relative;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: #c9a377;
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            z-index: 2;
+        }
+        
+        .envelope-lid {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 300px;
+            height: 100px;
+            background: #c9a377;
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            z-index: 3;
+            transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transform-origin: top center;
+        }
+        
+        .envelope-open .envelope-lid {
+            transform: rotateY(180deg) translateY(-50px);
+        }
+        
+        .cat-paw-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .flower-decoration {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.2;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(166, 198, 160, 0.3);
+        }
+        
+        .rsvp-success {
+            animation: success-pulse 0.5s ease;
+        }
+        
+        @keyframes success-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .testimonial-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .floating-romance {
+            position: absolute;
+            opacity: 0.7;
+            animation: float-romance 6s ease-in-out infinite;
+        }
+        
+        @keyframes float-romance {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+    </style>
+</head>
+<body class="bg-stone-50">
+    <!-- Floating Decorations -->
+    <div class="floating-decoration" style="top: 10%; left: 5%; font-size: 2rem; animation-duration: 15s;">🌸</div>
+    <div class="floating-decoration" style="top: 20%; right: 7%; font-size: 1.8rem; animation-duration: 18s; animation-delay: 1s;">🌿</div>
+    <div class="floating-decoration" style="bottom: 15%; left: 8%; font-size: 2.2rem; animation-duration: 12s; animation-delay: 2s;">🌺</div>
+    <div class="floating-decoration" style="bottom: 25%; right: 10%; font-size: 1.5rem; animation-duration: 20s; animation-delay: 0.5s;">🍃</div>
+    
+    <!-- Floating Cats -->
+    <div class="floating-cat" style="top: 15%; left: 15%; animation-delay: 0s;">🐱</div>
+    <div class="floating-cat" style="top: 70%; right: 20%; animation-delay: 1s;">🐱</div>
+    <div class="floating-cat" style="top: 30%; right: 15%; animation-delay: 2s;">🐱</div>
+    <div class="floating-cat" style="top: 45%; left: 10%; animation-delay: 3s;">🐱</div>
+    <div class="floating-cat" style="bottom: 30%; left: 25%; animation-delay: 4s;">🐱</div>
+    
+    <!-- Romantic Elements -->
+    <div id="romanticContainer"></div>
+    
+    <!-- Envelope Opening Experience -->
+    <div id="envelopeContainer" class="envelope-container">
+        <div class="envelope">
+            <div class="envelope-lid"></div>
+            <div class="cat-paw-button" id="openButton">
+                <div class="text-center">
+                    <div class="text-6xl">🐾</div>
+                    <p class="text-amber-900 font-bold mt-2">OPEN INVITATION</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content (Initially Hidden) -->
+    <div id="mainContent" class="hidden">
+        <!-- Hero Section -->
+        <section id="heroSection" class="section-reveal min-h-screen flex flex-col justify-center items-center px-4 py-16 bg-gradient-to-b from-stone-50 to-emerald-50 relative overflow-hidden">
+            <div class="flower-decoration text-9xl opacity-10 top-10 left-5">💐</div>
+            <div class="flower-decoration text-9xl opacity-10 bottom-10 right-5 rotate-90">💐</div>
+            <div class="absolute top-20 left-1/4 text-4xl opacity-20 animate-pulse">💕</div>
+            <div class="absolute bottom-40 right-1/3 text-5xl opacity-20 animate-pulse" style="animation-delay: 1s;">💞</div>
+            
+            <div class="text-center max-w-3xl z-10">
+                <h1 class="text-4xl md:text-6xl font-serif font-light text-stone-800 mb-6">Emma & Henry</h1>
+                <div class="flex items-center justify-center my-8">
+                    <span class="h-0.5 bg-emerald-200 w-16 mr-4"></span>
+                    <span class="text-xl text-stone-600 font-serif">are getting married</span>
+                    <span class="h-0.5 bg-emerald-200 w-16 ml-4"></span>
+                </div>
+                <p class="text-xl md:text-2xl text-stone-700 font-serif mb-12">Saturday, June 15th, 2025</p>
+                
+                <div class="mt-16">
+                    <p class="text-lg text-stone-600 italic">Please join us as we celebrate our love and commitment to each other</p>
+                    <div class="flex justify-center mt-12 space-x-8">
+                        <div class="border-t border-stone-300 w-16"></div>
+                        <div class="flex items-center text-stone-500">
+                            <span>📍</span>
+                            <span class="ml-2">St. Mary's Garden Church</span>
+                        </div>
+                        <div class="border-t border-stone-300 w-16"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Story Section -->
+        <section id="storySection" class="section-reveal py-20 px-4 bg-stone-50 relative">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-serif text-center text-stone-800 mb-12">Our Love Story</h2>
+                
+                <div class="mb-16">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                                Coffee Shop Meeting
+                            </div>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-serif text-stone-700 mb-3">How We Met</h3>
+                            <p class="text-stone-700 text-lg leading-relaxed">
+                                Our journey began three years ago in a cozy coffee shop downtown. Emma spilled her latte while reaching for a book,
+                                and Henry was there to help clean up the mess. What started as an awkward accident turned into hours of
+                                conversation about books, dreams, and life.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-16">
+                    <div class="flex flex-col md:flex-row-reverse gap-8 items-center">
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                                First Date
+                            </div>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-serif text-stone-700 mb-3">First Date</h3>
+                            <p class="text-stone-700 text-lg leading-relaxed">
+                                After connecting that day, we planned our first date at the local bookstore followed by dinner.
+                                We talked for hours about our favorite authors, childhood dreams, and future aspirations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-16">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                                Proposal Moment
+                            </div>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-serif text-stone-700 mb-3">The Proposal</h3>
+                            <p class="text-stone-700 text-lg leading-relaxed">
+                                After two years of adventures together, Henry proposed under the stars at our favorite hiking spot,
+                                surrounded by nature's beauty. As he got down on one knee, he said, "Emma, will you continue writing
+                                our beautiful story together?"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Memories Section -->
+        <section id="gallerySection" class="section-reveal py-20 px-4 bg-emerald-50 relative">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-serif text-center text-stone-800 mb-12">Beautiful Memories</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="relative group">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                            Beach Vacation
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                            <p class="text-white text-center px-4">Sunset at the beach where we renewed our vows</p>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                            Travel Adventure
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                            <p class="text-white text-center px-4">Mountain hike where we discovered our shared love of nature</p>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                            Festival Fun
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                            <p class="text-white text-center px-4">Local festival where we dressed up in traditional costumes</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="relative group">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                            Cooking Together
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                            <p class="text-white text-center px-4">Our first attempt at cooking a fancy meal together</p>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-stone-500">
+                            Pet Lovers
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                            <p class="text-white text-center px-4">Bonding over our shared love for animals</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Cats Section -->
+        <section id="catsSection" class="section-reveal py-20 px-4 bg-stone-50">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Our Cats</h2>
+                <p class="text-stone-600 mb-12">Meet our furry family members who are excited about the big day too!</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="testimonial-card bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <div class="text-5xl mb-4">😺</div>
+                        <h3 class="font-semibold text-stone-800">Whiskers</h3>
+                        <p class="text-stone-600 text-sm">Best groomsmen cat</p>
+                    </div>
+                    <div class="testimonial-card bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <div class="text-5xl mb-4">😸</div>
+                        <h3 class="font-semibold text-stone-800">Luna</h3>
+                        <p class="text-stone-600 text-sm">Flower cat</p>
+                    </div>
+                    <div class="testimonial-card bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <div class="text-5xl mb-4">😹</div>
+                        <h3 class="font-semibold text-stone-800">Mittens</h3>
+                        <p class="text-stone-600 text-sm">Ring bearer</p>
+                    </div>
+                    <div class="testimonial-card bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <div class="text-5xl mb-4">😻</div>
+                        <h3 class="font-semibold text-stone-800">Oliver</h3>
+                        <p class="text-stone-600 text-sm">Guest greeter</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- RSVP Section -->
+        <section id="rsvpSection" class="section-reveal py-20 px-4 bg-gradient-to-b from-emerald-50 to-stone-50">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-serif text-center text-stone-800 mb-12">RSVP</h2>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-stone-100 p-8">
+                    <form id="rsvpForm" class="space-y-6">
+                        <div>
+                            <label for="fullName" class="block text-stone-700 mb-2">Your Full Name *</label>
+                            <input type="text" id="fullName" name="fullName" required 
+                                   class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-200 form-input">
+                        </div>
+                        
+                        <div>
+                            <label for="attendees" class="block text-stone-700 mb-2">Number of Attendees *</label>
+                            <select id="attendees" name="attendees" required 
+                                    class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-200 form-input">
+                                <option value="">Select number</option>
+                                <option value="1">Just me</option>
+                                <option value="2">Couple</option>
+                                <option value="3">Family of 3</option>
+                                <option value="4">Family of 4</option>
+                                <option value="5">Family of 5</option>
+                                <option value="6">Family of 6</option>
+                                <option value="7">Family of 7</option>
+                                <option value="8">Family of 8</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-stone-700 mb-2">Leave a Message (Optional)</label>
+                            <textarea id="message" name="message" rows="4" 
+                                      class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-200 form-input"></textarea>
+                        </div>
+                        
+                        <button type="submit" id="submitBtn" 
+                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300">
+                            Send RSVP
+                        </button>
+                    </form>
+                    
+                    <div id="successMessage" class="hidden mt-6 p-4 bg-emerald-50 text-emerald-700 rounded-lg text-center rsvp-success">
+                        Thank you for your RSVP! We can't wait to celebrate with you!
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="py-10 text-center bg-stone-800 text-stone-300">
+            <p>With love and excitement, Emma & Henry</p>
+            <p class="mt-2 text-sm">Saturday, June 15th, 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        // State management
+        let invitationOpened = false;
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            setupIntersectionObserver();
+        });
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            const openButton = document.getElementById('openButton');
+            if (openButton) {
+                openButton.addEventListener('click', openInvitation);
+            }
+            
+            const rsvpForm = document.getElementById('rsvpForm');
+            if (rsvpForm) {
+                rsvpForm.addEventListener('submit', handleRSVPSubmit);
+            }
+        }
+        
+        // Handle envelope opening animation
+        function openInvitation() {
+            // Play opening sound
+            playOpenSound();
+            
+            // Add open class to trigger animation
+            const envelopeContainer = document.getElementById('envelopeContainer');
+            envelopeContainer.classList.add('envelope-open');
+            
+            setTimeout(() => {
+                // Hide envelope and show main content
+                envelopeContainer.style.opacity = '0';
+                envelopeContainer.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    envelopeContainer.style.display = 'none';
+                    document.getElementById('mainContent').classList.remove('hidden');
+                    
+                    // Play background music
+                    playBackgroundMusic();
+                    
+                    // Show intro animations
+                    animateSections();
+                }, 500);
+            }, 1000);
+        }
+        
+        // Animate sections after opening
+        function animateSections() {
+            const sections = [
+                document.getElementById('heroSection'),
+                document.getElementById('storySection'),
+                document.getElementById('gallerySection'),
+                document.getElementById('catsSection'),
+                document.getElementById('rsvpSection')
+            ];
+            
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    if (section) {
+                        section.classList.add('section-visible');
+                    }
+                }, 300 * index);
+            });
+        }
+        
+        // Setup intersection observer for scroll animations
+        function setupIntersectionObserver() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('section-visible');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all sections
+            document.querySelectorAll('.section-reveal').forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        // Handle RSVP form submission
+        async function handleRSVPSubmit(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const name = formData.get('fullName');
+            const attendees = formData.get('attendees');
+            const message = formData.get('message');
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            try {
+                // Submit to various services (stubs)
+                await submitRSVP(name, attendees, message);
+                await sendToGoogleForm(name, attendees, message);
+                await sendToGoogleSheets(name, attendees, message);
+                await sendToFirebase(name, attendees, message);
+                
+                // Show success message
+                document.getElementById('successMessage').classList.remove('hidden');
+                
+                // Reset form
+                event.target.reset();
+                
+                // Re-enable button after delay
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send RSVP';
+                }, 2000);
+            } catch (error) {
+                console.error('Error submitting RSVP:', error);
+                alert('There was an error submitting your RSVP. Please try again.');
+                
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send RSVP';
+            }
+        }
+        
+        // RSVP submission functions (stubs for integration)
+        function submitRSVP(name, attendees, message) {
+            // In a real implementation, this would submit to your backend
+            return new Promise(resolve => setTimeout(resolve, 500));
+        }
+        
+        function sendToGoogleForm(name, attendees, message) {
+            // In a real implementation, this would send data to Google Forms
+            // This would map fields to Google Form entry IDs
+            return new Promise(resolve => setTimeout(resolve, 500));
+        }
+        
+        function sendToGoogleSheets(name, attendees, message) {
+            // In a real implementation, this would send data to Google Sheets
+            return new Promise(resolve => setTimeout(resolve, 500));
+        }
+        
+        function sendToFirebase(name, attendees, message) {
+            // In a real implementation, this would send data to Firebase
+            return new Promise(resolve => setTimeout(resolve, 500));
+        }
+        
+        // Sound functions (placeholders)
+        function playBackgroundMusic() {
+            // In a real implementation, this would play background music
+            console.log("Playing background music...");
+        }
+        
+        function playOpenSound() {
+            // In a real implementation, this would play opening sound
+            console.log("Playing opening sound...");
+        }
+        
+        // Add floating effect to cats based on mouse movement
+        document.addEventListener('mousemove', (e) => {
+            const cats = document.querySelectorAll('.floating-cat');
+            cats.forEach(cat => {
+                const speed = 0.05;
+                const x = (window.innerWidth - e.pageX * speed) / 100;
+                const y = (window.innerHeight - e.pageY * speed) / 100;
+                cat.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+        
+        // Create romantic heart rain effect
+        function createRomanticHearts() {
+            const container = document.getElementById('romanticContainer');
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('romantic-heart');
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px'; // Random size between 15-35px
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's'; // Random fall duration between 5-10s
+                
+                container.appendChild(heart);
+                
+                // Remove heart after animation completes
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000);
+            }, 800); // Create a new heart every 800ms
+        }
+        
+        // Start romantic effects when the page loads
+        window.addEventListener('load', createRomanticHearts);
+    </script>
+</body>
+</html>
