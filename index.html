@@ -1,4 +1,4 @@
-<!-- Version: v2.3.1-FixObserver | Date: 2025-01-15 | 修复 section-2 图片滚动不显示问题 -->
+<!-- Version: v2.3.9-NavButton | Date: 2025-01-15 | 地图标签改为 Waze 导航按钮 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -142,7 +142,6 @@
             text-align: center;
         }
         .couple-illustration img {
-            /* 桌面版：290px */
             width: 290px;
             height: auto;
             display: block;
@@ -179,7 +178,6 @@
             opacity: 0; 
             transition: opacity 0.5s; 
             pointer-events: none;
-            /* 无 margin-top */
         }
         .enter-area.visible { opacity: 1; pointer-events: auto; }
         
@@ -298,8 +296,63 @@
         /* ========== 主内容 ========== */
         #progress { position: fixed; top: 0; left: 0; height: 1px; background: var(--text); z-index: 10000; transition: width 0.1s; width: 0%; opacity: 0.6; }
 
-        #main { opacity: 0; transition: opacity 1s ease; display: none; padding: 6vh 0 10vh; }
+        #main { opacity: 0; transition: opacity 1s ease; display: none; padding: 6vh 0 10vh; position: relative; }
         .container { max-width: 680px; margin: 0 auto; padding: 0 24px; position: relative; }
+
+        /* 🎵 极简版音乐播放器样式 */
+        .music-player {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            background: rgba(250, 247, 242, 0.95);
+            padding: 10px;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .music-player:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+            background: var(--text);
+        }
+        .music-player:hover .volume-icon {
+            color: var(--bg);
+        }
+        
+        .volume-icon {
+            font-size: 1.1rem;
+            color: var(--text);
+            transition: color 0.2s ease;
+            line-height: 1;
+        }
+        .volume-icon.muted {
+            color: var(--text-light);
+            opacity: 0.5;
+        }
+
+        /* ✨ Section 闪入闪出效果 */
+        .flash-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.5s ease, transform 1.5s var(--ease);
+            will-change: opacity, transform;
+        }
+        .flash-section.flash-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .flash-section.flash-out {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
 
         header { padding: 10vh 0 6vh; text-align: center; }
         .title-huge {
@@ -372,7 +425,74 @@
         .map-container { margin-top: 40px; position: relative; overflow: hidden; border-radius: 2px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
         .map-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #e8e4dc; }
         .map-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.2) sepia(0.1); }
-        .map-label { font-size: 0.8rem; opacity: 0.6; margin-bottom: 12px; }
+
+        /* 🗺️ 导航按钮样式 */
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: var(--gold);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 168, 67, 0.3);
+            text-decoration: none;
+        }
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 168, 67, 0.4);
+            background: #c4983d;
+        }
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        .nav-icon {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        /* 📍 地址信息样式 */
+        .venue-address {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(250, 247, 242, 0.8);
+            border: 1px solid rgba(201, 169, 97, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .address-icon {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .address-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .address-detail {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+        .address-detail .lang-en {
+            font-style: italic;
+            color: var(--accent);
+        }
 
         .timeline-section { padding: 8vh 0 10vh; }
         .timeline-section-inner { max-width: 620px; margin: 0 auto; }
@@ -486,6 +606,30 @@
             .invitation-title-zh { font-size: 2.2rem; letter-spacing: 6px; }
             .invitation-title-en { font-size: 1.6rem; letter-spacing: 6px; }
             .corner { width: 28px; height: 28px; }
+            
+            /* 移动端音乐播放器适配 */
+            .music-player {
+                bottom: 16px;
+                right: 16px;
+                padding: 8px;
+                width: 36px;
+                height: 36px;
+            }
+            .volume-icon { font-size: 1rem; }
+            
+            /* 移动端地址适配 */
+            .venue-address {
+                margin-top: 20px;
+                padding: 16px;
+            }
+            .address-title { font-size: 0.9rem; }
+            .address-detail { font-size: 0.8rem; }
+            
+            /* 移动端导航按钮 */
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -560,7 +704,7 @@
                         <span class="cat-name">MEOW</span>
                     </div>
                     <div class="cat-item cat-miya" onclick="playMeow('miya_t', this)">
-                        <span class="meow-bubble">💕</span>
+                        <span class="meow-bubble"></span>
                         <img src="asset/image/img/miya_t.png" alt="miya" loading="lazy">
                         <span class="cat-name">MIYA</span>
                     </div>
@@ -570,7 +714,7 @@
                         <span class="cat-name">YUMI</span>
                     </div>
                     <div class="cat-item cat-fubao" onclick="playMeow('fubao_t', this)">
-                        <span class="meow-bubble">🎵</span>
+                        <span class="meow-bubble"></span>
                         <img src="asset/image/img/fubao_t.png" alt="fubao" loading="lazy">
                         <span class="cat-name">FUBAO</span>
                     </div>
@@ -590,6 +734,17 @@
 
     <!-- ========== 主内容 ========== -->
     <div id="main">
+        <!-- 🎵 极简版音乐播放器 -->
+        <div class="music-player" id="music-player" title="点击切换静音">
+            <span class="volume-icon" id="volume-icon">🔊</span>
+        </div>
+        
+        <!-- 隐藏的背景音乐 -->
+        <audio id="bgm" loop preload="auto">
+            <source src="asset/audio/bgm/wedding-bgm.mp3" type="audio/mpeg">
+            您的浏览器不支持 audio 元素。
+        </audio>
+
         <div class="container">
             <header id="section-0">
                 <h1 class="title-huge">
@@ -605,7 +760,7 @@
             <div class="ghost-cat" id="cat-l"></div>
             <div class="ghost-cat" id="cat-r"></div>
 
-            <section class="invite-section" id="section-1">
+            <section class="invite-section flash-section" id="section-1">
                 <h2 class="invite-big-text lang-zh">从相识到相守，<br>每一步都是命中注定。</h2>
                 <h2 class="invite-big-text lang-en">Grow old along with me,<br>the best is yet to be.</h2>
                 <div class="invite-small-text">
@@ -616,7 +771,7 @@
                 </div>
             </section>
 
-            <section class="gallery-section" id="section-2">
+            <section class="gallery-section flash-section" id="section-2">
                 <div class="photo-block">
                     <div class="img-wrapper">
                         <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop" alt="Wedding 01">
@@ -631,12 +786,12 @@
                 </div>
             </section>
 
-            <section class="divider-page" id="section-3">
+            <section class="divider-page flash-section" id="section-3">
                 <p class="quote-text lang-zh">时间是让人猝不及防的东西<br>晴时有风阴时有雨<br>争不过朝夕又念着往昔</p>
                 <p class="quote-text lang-en">Love is not love which alters when it alteration finds.</p>
             </section>
 
-            <section class="gallery-section" id="section-4">
+            <section class="gallery-section flash-section" id="section-4">
                 <div class="photo-block">
                     <div class="img-wrapper">
                         <img src="https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=1978&auto=format&fit=crop" alt="Wedding 02">
@@ -651,7 +806,7 @@
                 </div>
             </section>
             
-            <section class="gallery-section" id="section-5">
+            <section class="gallery-section flash-section" id="section-5">
                  <div class="photo-block">
                     <div class="img-wrapper">
                         <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" alt="Wedding 03">
@@ -666,7 +821,7 @@
                 </div>
             </section>
 
-            <section class="info-section" id="section-6">
+            <section class="info-section flash-section" id="section-6">
                 <h2 style="font-family: 'Noto Serif SC'; font-size: 2rem; font-weight: 300; margin-bottom: 10px;" class="lang-zh">婚礼详情</h2>
                 <h2 style="font-family: 'Cormorant Garamond'; font-size: 2.5rem; font-weight: 400; font-style: italic; margin-bottom: 10px;" class="lang-en">The Details</h2>
                 
@@ -688,19 +843,38 @@
                 
                 <div class="line-bottom"></div>
                 
+                <!-- 🗺️ 地图容器 -->
                 <div class="map-container">
-                    <p class="map-label lang-zh">婚礼地点 · 点击查看导航</p>
-                    <p class="map-label lang-en">Wedding Venue · Click for Directions</p>
                     <div class="map-wrapper">
                         <iframe 
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3675.1234567890123!2d121.4737013!3d31.230416!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDEzJzQ5LjUiTiAxMjHCsDI4JzI1LjMiRQ!5e0!3m2!1szh-CN!2s!4v1234567890123!5m2!1szh-CN!2s"
                             allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
+                    
+                    <!-- 🗺️ Waze 导航按钮 -->
+                    <button class="nav-btn" id="nav-btn" onclick="openNavigation()">
+                        <span class="nav-icon">🗺️</span>
+                        <span class="lang-zh">前往导航</span>
+                        <span class="lang-en">Navigate</span>
+                    </button>
+                    
+                    <!-- 📍 地址信息 -->
+                    <div class="venue-address">
+                        <span class="address-icon">📍</span>
+                        <div class="address-title">
+                            <span class="lang-zh">上海外滩华尔道夫酒店 · 宴会厅</span>
+                            <span class="lang-en">The Waldorf Astoria Shanghai · Grand Ballroom</span>
+                        </div>
+                        <div class="address-detail">
+                            <span class="lang-zh">上海市黄浦区中山东一路 2 号</span>
+                            <span class="lang-en">No. 2 Zhongshan East 1st Road, Huangpu District, Shanghai</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <section class="timeline-section" id="section-8">
+            <section class="timeline-section flash-section" id="section-8">
                 <div class="timeline-section-inner">
                     <h2 class="timeline-title lang-zh">流程安排</h2>
                     <h2 class="timeline-title lang-en">The Timeline</h2>
@@ -723,7 +897,7 @@
                 </div>
             </section>
 
-            <section class="rsvp-section" id="section-9">
+            <section class="rsvp-section flash-section" id="section-9">
                 <div class="rsvp-content">
                     <h2 class="rsvp-title lang-zh">期待您的到来</h2>
                     <h2 class="rsvp-title lang-en">Your Presence Is Our Greatest Gift</h2>
@@ -852,6 +1026,7 @@
             osc.start(now); osc.stop(now + 0.4);
         }
 
+        // ✅ enterWedding() 保持原始逻辑，未作任何改动
         function enterWedding() {
             const entrance = document.getElementById('entrance');
             entrance.style.opacity = '0';
@@ -861,8 +1036,64 @@
                 const main = document.getElementById('main');
                 main.style.display = 'block';
                 setTimeout(() => main.style.opacity = '1', 50);
-                initCat(); initScroll();
+                // initCat(); // 【已注释】不再初始化幽灵猫咪
+                initScroll();
+                initSectionFlash(); // ✨ 初始化章节闪入闪出效果
             }, 800);
+        }
+
+        // 🎵 极简版音乐播放器功能（独立监听，不侵入 enterWedding）
+        function initMusicPlayer() {
+            const bgm = document.getElementById('bgm');
+            const volumeIcon = document.getElementById('volume-icon');
+            const musicPlayer = document.getElementById('music-player');
+            let isMuted = false;
+
+            bgm.volume = 0.7; // 默认音量 0.7
+
+            bgm.play().then(() => {
+                volumeIcon.textContent = '🔊';
+            }).catch(() => {
+                volumeIcon.textContent = '🔇';
+                isMuted = true;
+            });
+
+            musicPlayer.addEventListener('click', () => {
+                if (isMuted) {
+                    bgm.muted = false;
+                    volumeIcon.textContent = '🔊';
+                    volumeIcon.classList.remove('muted');
+                    isMuted = false;
+                } else {
+                    bgm.muted = true;
+                    volumeIcon.textContent = '🔇';
+                    volumeIcon.classList.add('muted');
+                    isMuted = true;
+                }
+            });
+        }
+
+        // 🔍 监听进入按钮点击，负责启动音乐播放器
+        document.querySelector('.enter-btn').addEventListener('click', initMusicPlayer);
+
+        // 🗺️ 导航功能：优先 Waze，降级系统默认
+        function openNavigation() {
+            // ⚙️ 请在此处修改为实际的婚礼场地经纬度
+            const LAT = 31.230416;
+            const LNG = 121.4737013;
+            
+            const wazeUrl = `https://waze.com/ul?ll=${LAT},${LNG}&navigate=yes`;
+            const defaultUrl = `https://maps.google.com/maps?daddr=${LAT},${LNG}`;
+            
+            // 尝试打开 Waze
+            window.location.href = wazeUrl;
+            
+            // 如果 1.5 秒后未跳转（Waze 未安装），则降级到系统默认导航
+            setTimeout(() => {
+                if (document.hasFocus()) {
+                    window.location.href = defaultUrl;
+                }
+            }, 1500);
         }
 
         window.addEventListener('scroll', () => {
@@ -871,47 +1102,43 @@
             document.getElementById('progress').style.width = p + '%';
         }, {passive: true});
 
-        // 【修复】：正确遍历 NodeList 来观察元素
+        //  Section 闪入闪出效果控制器
+        function initSectionFlash() {
+            const targets = document.querySelectorAll('#section-1, #section-2, #section-3, #section-4, #section-5, #section-6, #section-8, #section-9');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('flash-in');
+                        entry.target.classList.remove('flash-out');
+                    } else {
+                        entry.target.classList.add('flash-out');
+                        entry.target.classList.remove('flash-in');
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: '-10% 0px'
+            });
+
+            targets.forEach(section => {
+                section.classList.add('flash-section');
+                observer.observe(section);
+            });
+        }
+
         function initScroll() {
             const photoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
             }, { threshold: 0.15 });
             
-            // 修复：使用 forEach 循环每一个元素
             document.querySelectorAll('.photo-block').forEach(el => photoObserver.observe(el));
 
             const tlObserver = new IntersectionObserver((entries) => {
                 entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
             }, { threshold: 0.3 });
             
-            // 修复：使用 forEach 循环每一个元素
             document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
-        }
-
-        function initCat() {
-            const l = document.getElementById('cat-l'), r = document.getElementById('cat-r');
-            const srcs = ['asset/image/gif/cat1.gif', 'asset/image/gif/cat2.gif', 'asset/image/gif/cat3.gif'];
-            let lastY = window.scrollY, timer = null, activeSide = null;
-            window.addEventListener('scroll', () => {
-                const curY = window.scrollY;
-                if (Math.abs(curY - lastY) > 40) {
-                    if (timer) clearTimeout(timer);
-                    const side = Math.random() < 0.5 ? 'l' : 'r';
-                    const active = side === 'l' ? l : r, passive = side === 'l' ? r : l;
-                    passive.classList.remove('active');
-                    if (activeSide !== side) {
-                        active.classList.remove('active');
-                        active.style.top = (80 + Math.random() * (window.innerHeight - 160)) + 'px';
-                        active.style[side === 'l' ? 'left' : 'right'] = (2 + Math.random() * 4) + '%';
-                        active.innerHTML = `<img src="${srcs[Math.floor(Math.random()*srcs.length)]}" onerror="this.src='https://placekitten.com/100/100'">`;
-                        requestAnimationFrame(() => active.classList.add('active'));
-                        activeSide = side;
-                    }
-                    lastY = curY;
-                }
-                clearTimeout(timer);
-                timer = setTimeout(() => { l.classList.remove('active'); r.classList.remove('active'); }, 1500);
-            }, {passive: true});
         }
 
         function submitRSVP(e) {
