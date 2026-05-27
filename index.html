@@ -1,4 +1,4 @@
-<!-- Version: v2.3.12-MultiImageCarousel | Date: 2025-01-15 | photo-block 支持多图片轮播 -->
+<!-- Version: v2.3.16-Random5Animations | Date: 2025-01-15 | 完整版 HTML (含5种随机图片动画) -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -388,7 +388,7 @@
         .ghost-cat img { width: 100%; height: 100%; object-fit: cover; }
         .ghost-cat.active { opacity: 0.8; }
 
-        /* 🖼️ 图片画廊与轮播样式 */
+        /* ️ 图片画廊与轮播样式 - 含5种随机动画 */
         .gallery-section { padding: 6vh 0; }
         .photo-block {
             display: flex; flex-direction: column; gap: 32px;
@@ -408,35 +408,32 @@
             background: #e8e4dc;
             border-radius: 2px;
         }
-        
-        /* 单张图片（默认） */
-        .img-wrapper img { 
-            width: 100%; 
-            height: 110%; 
-            object-fit: cover; 
-            transform: translateY(-5%); 
-            transition: transform 1.5s var(--ease); 
-        }
-        .photo-block.visible .img-wrapper img { transform: translateY(0); }
 
-        /* 多图片轮播容器 */
-        .img-carousel {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-        }
+        /* 轮播容器 */
+        .img-carousel { position: absolute; inset: 0; width: 100%; height: 100%; }
+        
+        /* Slide 基础样式 */
         .img-slide {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             opacity: 0;
-            transition: opacity 1.2s ease;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
         }
         .img-slide.active {
             opacity: 1;
+            transform: translate(0, 0) scale(1);
         }
+        
+        /* 🎞️ 5种随机入场动画 (初始状态) */
+        .anim-left .img-slide { transform: translateX(-100%); }
+        .anim-right .img-slide { transform: translateX(100%); }
+        .anim-up .img-slide { transform: translateY(100%); }
+        .anim-zoom-in .img-slide { transform: scale(1.12); }
+        .anim-zoom-out .img-slide { transform: scale(0.88); }
+
         .img-slide img {
             width: 100%;
             height: 110%;
@@ -447,39 +444,6 @@
         .photo-block.visible .img-slide img {
             transform: translateY(0);
         }
-
-        /* 🎞️ 6种随机轮播动画效果 */
-        .anim-fade { /* 默认淡入淡出 */ }
-        
-        .anim-slide-left { 
-            transform: translateX(-100%); 
-            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
-        }
-        .anim-slide-left.active { transform: translateX(0); }
-        
-        .anim-slide-right { 
-            transform: translateX(100%); 
-            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
-        }
-        .anim-slide-right.active { transform: translateX(0); }
-        
-        .anim-zoom-in { 
-            transform: scale(1.15); 
-            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
-        }
-        .anim-zoom-in.active { transform: scale(1); }
-        
-        .anim-slide-up { 
-            transform: translateY(100%); 
-            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
-        }
-        .anim-slide-up.active { transform: translateY(0); }
-        
-        .anim-zoom-out { 
-            transform: scale(0.85); 
-            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
-        }
-        .anim-zoom-out.active { transform: scale(1); }
 
         /* 轮播指示点 */
         .img-dots {
@@ -532,7 +496,7 @@
         .map-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #e8e4dc; }
         .map-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.2) sepia(0.1); }
 
-        /* 🗺️ 导航按钮样式 */
+        /* ️ 导航按钮样式 */
         .nav-btn {
             display: inline-flex;
             align-items: center;
@@ -566,7 +530,7 @@
             line-height: 1;
         }
 
-        /* 📍 地址信息样式 */
+        /*  地址信息样式 */
         .venue-address {
             margin-top: 24px;
             padding: 20px;
@@ -1000,11 +964,19 @@
                 </div>
             </section>
             
-            <!-- 🖼️ Section 5: 单张图片示例 -->
+            <!-- 🖼️ Section 5: 多张图片轮播示例 (2张) -->
             <section class="gallery-section flash-section" id="section-5">
                  <div class="photo-block">
-                    <div class="img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" alt="Wedding 03">
+                    <div class="img-wrapper has-carousel">
+                        <div class="img-carousel">
+                            <div class="img-slide active">
+                                <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" alt="Wedding 03-1">
+                            </div>
+                            <div class="img-slide">
+                                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop" alt="Wedding 03-2">
+                            </div>
+                        </div>
+                        <div class="img-dots"></div>
                     </div>
                     <div class="text-area">
                         <div class="bg-num">03</div>
@@ -1324,11 +1296,11 @@
             document.getElementById('progress').style.width = p + '%';
         }, {passive: true});
 
-        // 🖼️ 图片轮播功能
+        // 🖼️ 图片轮播功能 - 支持5种随机动画
         function initCarousels() {
-            const carousels = document.querySelectorAll('.img-wrapper.has-carousel');
+            const animations = ['anim-left', 'anim-right', 'anim-up', 'anim-zoom-in', 'anim-zoom-out'];
             
-            carousels.forEach(wrapper => {
+            document.querySelectorAll('.img-wrapper.has-carousel').forEach(wrapper => {
                 const slides = wrapper.querySelectorAll('.img-slide');
                 const dotsContainer = wrapper.querySelector('.img-dots');
                 
@@ -1340,6 +1312,7 @@
                 
                 let currentIndex = 0;
                 let intervalId = null;
+                let isAnimating = false;
                 
                 // 生成指示点
                 slides.forEach((_, index) => {
@@ -1353,6 +1326,13 @@
                 const dots = dotsContainer.querySelectorAll('.img-dot');
                 
                 function goToSlide(index) {
+                    if (index === currentIndex || isAnimating) return;
+                    isAnimating = true;
+                    
+                    // 🎲 随机分配动画类名到 Wrapper
+                    const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+                    wrapper.classList.add(randomAnim);
+                    
                     slides[currentIndex].classList.remove('active');
                     dots[currentIndex].classList.remove('active');
                     
@@ -1360,6 +1340,12 @@
                     
                     slides[currentIndex].classList.add('active');
                     dots[currentIndex].classList.add('active');
+                    
+                    // 动画结束后清理类名
+                    setTimeout(() => {
+                        wrapper.classList.remove(randomAnim);
+                        isAnimating = false;
+                    }, 800); // 与 CSS transition 保持一致
                 }
                 
                 function nextSlide() {
