@@ -1,4 +1,4 @@
-<!-- Version: v2.3.12-MultiImageCarousel | Date: 2025-01-15 | 修复音量图标初始状态及电话图标 -->
+<!-- Version: v2.3.12-MultiImageCarousel | Date: 2025-01-15 | photo-block 支持多图片轮播 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -342,8 +342,8 @@
         /* ✨ Section 闪入闪出效果 */
         .flash-section {
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1.5s ease, transform 1.5s var(--ease);
+            transform: translateY(30px);
+            transition: all 1s var(--ease);
             will-change: opacity, transform;
         }
         .flash-section.flash-in {
@@ -448,6 +448,39 @@
             transform: translateY(0);
         }
 
+        /* 🎞️ 6种随机轮播动画效果 */
+        .anim-fade { /* 默认淡入淡出 */ }
+        
+        .anim-slide-left { 
+            transform: translateX(-100%); 
+            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
+        }
+        .anim-slide-left.active { transform: translateX(0); }
+        
+        .anim-slide-right { 
+            transform: translateX(100%); 
+            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
+        }
+        .anim-slide-right.active { transform: translateX(0); }
+        
+        .anim-zoom-in { 
+            transform: scale(1.15); 
+            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
+        }
+        .anim-zoom-in.active { transform: scale(1); }
+        
+        .anim-slide-up { 
+            transform: translateY(100%); 
+            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
+        }
+        .anim-slide-up.active { transform: translateY(0); }
+        
+        .anim-zoom-out { 
+            transform: scale(0.85); 
+            transition: opacity 1.2s ease, transform 1.2s var(--ease); 
+        }
+        .anim-zoom-out.active { transform: scale(1); }
+
         /* 轮播指示点 */
         .img-dots {
             position: absolute;
@@ -499,7 +532,7 @@
         .map-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #e8e4dc; }
         .map-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.2) sepia(0.1); }
 
-        /* ️ 导航按钮样式 */
+        /* 🗺️ 导航按钮样式 */
         .nav-btn {
             display: inline-flex;
             align-items: center;
@@ -884,7 +917,7 @@
     <div id="main">
         <!-- 🎵 极简版音乐播放器 -->
         <div class="music-player" id="music-player" title="点击切换静音">
-            <span class="volume-icon" id="volume-icon"></span>
+            <span class="volume-icon" id="volume-icon">🔊</span>
         </div>
         
         <!-- 隐藏的背景音乐 -->
@@ -919,7 +952,7 @@
                 </div>
             </section>
 
-            <!-- ️ Section 2: 单张图片示例 -->
+            <!-- 🖼️ Section 2: 单张图片示例 -->
             <section class="gallery-section flash-section" id="section-2">
                 <div class="photo-block">
                     <div class="img-wrapper">
@@ -950,6 +983,9 @@
                             </div>
                             <div class="img-slide">
                                 <img src="https://images.unsplash.com/photo-1520854221256-17451cc330e7?q=80&w=1974&auto=format&fit=crop" alt="Wedding 02-2">
+                            </div>
+                            <div class="img-slide">
+                                <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=2070&auto=format&fit=crop" alt="Wedding 02-3">
                             </div>
                         </div>
                         <div class="img-dots"></div>
@@ -1018,7 +1054,7 @@
                         <span class="lang-en">Navigate</span>
                     </button>
                     
-                    <!--  地址信息 -->
+                    <!-- 📍 地址信息 -->
                     <div class="venue-address">
                         <span class="address-icon">📍</span>
                         <div class="address-title">
@@ -1110,7 +1146,7 @@
                         <div class="contact-name lang-en">Xiao Mei</div>
                         <div class="contact-role lang-zh">新娘</div>
                         <div class="contact-role lang-en">Bride</div>
-                        <a href="tel:+8612345678902" class="contact-link"> 123-4567-8902</a>
+                        <a href="tel:+8612345678902" class="contact-link">📞 123-4567-8902</a>
                     </div>
                 </div>
             </section>
@@ -1237,14 +1273,10 @@
 
             bgm.volume = 0.7; // 默认音量 0.7
 
-            // ✅ 强制显示 🔊 图标
-            volumeIcon.textContent = '🔊';
-
             bgm.play().then(() => {
                 volumeIcon.textContent = '🔊';
             }).catch(() => {
-                // ✅ 即使自动播放失败，也保持显示 🔊 图标
-                volumeIcon.textContent = '🔊';
+                volumeIcon.textContent = '🔇';
                 isMuted = true;
             });
 
@@ -1256,7 +1288,7 @@
                     isMuted = false;
                 } else {
                     bgm.muted = true;
-                    volumeIcon.textContent = '';
+                    volumeIcon.textContent = '🔇';
                     volumeIcon.classList.add('muted');
                     isMuted = true;
                 }
